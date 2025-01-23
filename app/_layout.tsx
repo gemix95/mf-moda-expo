@@ -31,6 +31,13 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen 
+          name="sales" 
+          options={({ route }) => ({ 
+            title: `${(route.params as { sector?: string })?.sector || ''} Sales`,
+            headerBackTitle: 'Back'
+          })} 
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
