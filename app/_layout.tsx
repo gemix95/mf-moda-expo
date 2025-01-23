@@ -1,6 +1,7 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Tabs } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -29,17 +30,44 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen 
-          name="sales" 
-          options={({ route }) => ({ 
-            title: `${(route.params as { sector?: string })?.sector || ''} Sales`,
-            headerBackTitle: 'Back'
-          })} 
+      <Tabs screenOptions={{ headerShown: false }}>
+        <Tabs.Screen 
+          name="index"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color }) => <MaterialIcons name="home" size={24} color={color} />,
+            title: 'Home'
+          }}
         />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+        <Tabs.Screen 
+          name="brands"
+          options={{
+            tabBarIcon: ({ color }) => <MaterialIcons name="local-offer" size={24} color={color} />,
+            title: 'Brands'
+          }}
+        />
+        <Tabs.Screen 
+          name="search"
+          options={{
+            tabBarIcon: ({ color }) => <MaterialIcons name="search" size={24} color={color} />,
+            title: 'Search'
+          }}
+        />
+        <Tabs.Screen 
+          name="cart"
+          options={{
+            tabBarIcon: ({ color }) => <MaterialIcons name="shopping-cart" size={24} color={color} />,
+            title: 'Cart'
+          }}
+        />
+        <Tabs.Screen 
+          name="profile"
+          options={{
+            tabBarIcon: ({ color }) => <MaterialIcons name="person" size={24} color={color} />,
+            title: 'Profile'
+          }}
+        />
+      </Tabs>
       <StatusBar style="auto" />
     </ThemeProvider>
   );

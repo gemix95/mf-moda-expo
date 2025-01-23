@@ -69,7 +69,7 @@ export default function SearchScreen() {
               style={styles.categoryHeader}
               onPress={() => {
                 router.push({
-                  pathname: '/sales',
+                  pathname: '/search/sales',
                   params: {
                     sector: selectedSector,
                     categories: JSON.stringify(currentSectorData.categoriesInSale)
