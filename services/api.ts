@@ -1,3 +1,4 @@
+import { Config } from '@/types/config';
 import { Product } from '@/types/product';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
@@ -86,12 +87,23 @@ export const api = {
       body: JSON.stringify(params),
     });
 
-    console.log(response.url)
-    console.log(response.bodyUsed)
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
 
     return response.json();
   },
+
+  async getConfig(): Promise<Config> {
+    const response = await fetch(`${BASE_URL}/api/v1/json/config`, {
+      method: 'GET',
+      headers: defaultHeaders,
+    });
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    return response.json();
+  }
 };

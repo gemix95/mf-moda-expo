@@ -8,7 +8,7 @@ export default function HomeLayout() {
         headerShown: true,
         headerTitle: () => (
             <Image
-                source={require('../../assets/images/logo.png')}
+                source={require('../../../assets/images/logo.png')}
                 style={{ width: 120, height: 40, resizeMode: 'contain' }}
             />
             ),
