@@ -1,4 +1,5 @@
 import { Config } from '@/types/config';
+import { HomepageResponse } from '@/types/homepage';
 import { Product } from '@/types/product';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
@@ -46,8 +47,9 @@ interface GetProductsParams {
   countryCode: string;
   subCategory?: string;
   brand?: string;
-  sector: string;
+  sector?: string;
   onlySale?: boolean;
+  collectionId?: string
 }
 
 export const api = {
@@ -94,6 +96,24 @@ export const api = {
     return response.json();
   },
 
+  async getProductsByCollection(params: GetProductsParams): Promise<ProductsResponse> {
+    const response = await fetch(`${BASE_URL}/api/v1/products/collection`, {
+      method: 'POST',
+      headers: {
+        ...defaultHeaders,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
+    console.log(response.url)
+    console.log(params)
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    return response.json();
+  },
+
   async getConfig(): Promise<Config> {
     const response = await fetch(`${BASE_URL}/api/v1/json/config`, {
       method: 'GET',
@@ -105,5 +125,22 @@ export const api = {
     }
     
     return response.json();
-  }
+  },
+  
+  async getHomepage(sector: string): Promise<HomepageResponse> {
+    const response = await fetch(`${BASE_URL}/api/v1/json/homepage`, {
+      method: 'POST',
+      headers: {
+        ...defaultHeaders,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ sector }),
+    });
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    return response.json();
+  },
 };

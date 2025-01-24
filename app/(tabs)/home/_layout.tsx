@@ -15,6 +15,14 @@ export default function HomeLayout() {
             headerTitleAlign: 'center',
         }}
         />
+        <Stack.Screen 
+        name="catalog" 
+        options={({ route }) => ({ 
+          title: `${(route.params as { title?: string })?.title || ''}`,
+          headerBackTitle: 'Back',
+          presentation: 'card'
+        })} 
+        />
     </Stack>
   );
 }
