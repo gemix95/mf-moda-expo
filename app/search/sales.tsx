@@ -43,7 +43,6 @@ export default function SalesScreen() {
                     router.push({
                       pathname: '/search/catalog',
                       params: {
-                        countryCode: 'IT',
                         sector: sector,
                         subCategory: subCategory,
                         onlySale: 'true'

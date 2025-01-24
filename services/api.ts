@@ -43,7 +43,8 @@ interface ProductsResponse {
 
 interface GetProductsParams {
   countryCode: string;
-  subCategory: string;
+  subCategory?: string;
+  brand?: string;
   sector: string;
   onlySale?: boolean;
 }
@@ -85,6 +86,8 @@ export const api = {
       body: JSON.stringify(params),
     });
 
+    console.log(response.url)
+    console.log(response.bodyUsed)
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }

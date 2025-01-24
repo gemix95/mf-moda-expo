@@ -4,6 +4,7 @@ import { api } from '@/services/api';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ScrollablePicker } from '@/components/ScrollablePicker';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { router } from 'expo-router';
 
 export default function BrandsScreen() {
   const [sectors, setSectors] = useState<{ name: string; brands: string[] }[]>([]);
@@ -76,7 +77,20 @@ export default function BrandsScreen() {
               <Text style={styles.sectionHeader}>{letter}</Text>
               {brandsList.map((brand) => (
                 <View key={brand} style={styles.brandRow}>
-                  <Text style={styles.brandName}>{brand}</Text>
+                  <TouchableOpacity 
+                    style={styles.brandNameContainer}
+                    onPress={() => {
+                      router.push({
+                        pathname: '/brands/catalog',
+                        params: {
+                          sector: selectedSector,
+                          brand: brand
+                        }
+                      });
+                    }}
+                  >
+                    <Text style={styles.brandName}>{brand}</Text>
+                  </TouchableOpacity>
                   <TouchableOpacity>
                     <MaterialIcons
                       name="favorite-border"
@@ -160,5 +174,9 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 16,
     fontWeight: '300'
+  },
+  brandNameContainer: {
+    flex: 1,
+    paddingRight: 16,
   },
 });
