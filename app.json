@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "mf-moda-expo",
-    "slug": "mf-moda-expo",
-    "version": "1.0.0",
+    "name": "mf-moda",
+    "slug": "mf-moda",
+    "version": "3.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
