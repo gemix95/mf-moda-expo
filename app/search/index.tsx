@@ -43,15 +43,6 @@ export default function SearchScreen() {
     <View style={styles.container}>
       {loading && <LoadingScreen />}
       
-      <ScrollablePicker
-        items={categories.map(item => ({
-          id: item.sector,
-          label: item.sector,
-        }))}
-        selectedId={selectedSector}
-        onSelect={setSelectedSector}
-      />
-
       <View style={styles.searchContainer}>
         <MaterialIcons name="search" size={24} color="#999" style={styles.searchIcon} />
         <TextInput
@@ -61,6 +52,15 @@ export default function SearchScreen() {
           onChangeText={setSearchText}
         />
       </View>
+
+      <ScrollablePicker
+        items={categories.map(item => ({
+          id: item.sector,
+          label: item.sector,
+        }))}
+        selectedId={selectedSector}
+        onSelect={setSelectedSector}
+      />
 
       <ScrollView style={styles.categoriesContainer}>
         {currentSectorData?.categoriesInSale?.length > 0 && (
@@ -78,7 +78,7 @@ export default function SearchScreen() {
               }}
             >
               <Text style={[styles.categoryTitle, styles.salesTitle]}>Sales</Text>
-              <MaterialIcons name="chevron-right" size={24} color="red" />
+              <MaterialIcons name="chevron-right" size={24} color="#468866" />
             </TouchableOpacity>
           </View>
         )}
@@ -103,6 +103,16 @@ export default function SearchScreen() {
                   <TouchableOpacity
                     key={subCategory}
                     style={styles.subCategoryItem}
+                    onPress={() => {
+                      router.push({
+                        pathname: '/search/catalog',
+                        params: {
+                          countryCode: 'IT',
+                          sector: selectedSector,
+                          subCategory: subCategory
+                        }
+                      });
+                    }}
                   >
                     <Text style={styles.subCategoryText}>{subCategory}</Text>
                     <MaterialIcons name="chevron-right" size={24} color="#999" />
@@ -148,7 +158,8 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: 16,
+    marginTop: 16,
+    marginHorizontal: 16,
     paddingHorizontal: 16,
     height: 44,
     backgroundColor: '#f5f5f5',
@@ -162,6 +173,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   categoriesContainer: {
+    marginTop: 16,
     flex: 1,
   },
   categorySection: {
@@ -195,7 +207,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   salesTitle: {
-    color: 'red',
+    color: '#468866',
     fontWeight: '600',
   },
 });

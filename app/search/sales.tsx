@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 export default function SalesScreen() {
   const { sector, categories } = useLocalSearchParams();
@@ -39,6 +39,17 @@ export default function SalesScreen() {
                 <TouchableOpacity
                   key={subCategory}
                   style={styles.subCategoryItem}
+                  onPress={() => {
+                    router.push({
+                      pathname: '/search/catalog',
+                      params: {
+                        countryCode: 'IT',
+                        sector: sector,
+                        subCategory: subCategory,
+                        onlySale: 'true'
+                      }
+                    });
+                  }}
                 >
                   <Text style={styles.subCategoryText}>{subCategory}</Text>
                   <MaterialIcons name="chevron-right" size={24} color="#999" />

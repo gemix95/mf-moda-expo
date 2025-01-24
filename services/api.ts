@@ -1,3 +1,4 @@
+import { Product } from '@/types/product';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
@@ -26,7 +27,7 @@ interface CategoriesResponse {
     data: SectorData[];
 }
 
-const BASE_URL = 'https://michelefranzese.moda/api/v1';
+const BASE_URL = 'https://michelefranzese.moda';
 
 const defaultHeaders = {
   'language': 'it',
@@ -36,9 +37,20 @@ const defaultHeaders = {
 };
 
 // Add this method to your existing api object
+interface ProductsResponse {
+  products: Product[];
+}
+
+interface GetProductsParams {
+  countryCode: string;
+  subCategory: string;
+  sector: string;
+  onlySale?: boolean;
+}
+
 export const api = {
   async getBrands(): Promise<BrandsResponse> {
-    const response = await fetch(`${BASE_URL}/json/brands`, {
+    const response = await fetch(`${BASE_URL}/api/v1/json/brands`, {
       method: 'GET',
       headers: defaultHeaders,
     });
@@ -51,7 +63,7 @@ export const api = {
   },
   
   async getCategories(): Promise<CategoriesResponse> {
-    const response = await fetch(`${BASE_URL}/json/categories`, {
+    const response = await fetch(`${BASE_URL}/api/v1/json/categories`, {
       method: 'GET',
       headers: defaultHeaders,
     });
@@ -61,5 +73,22 @@ export const api = {
     }
     
     return response.json();
-  }
+  },
+
+  async getProducts(params: GetProductsParams): Promise<ProductsResponse> {
+    const response = await fetch(`${BASE_URL}/api/v1/products`, {
+      method: 'POST',
+      headers: {
+        ...defaultHeaders,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    return response.json();
+  },
 };

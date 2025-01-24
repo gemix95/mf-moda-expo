@@ -42,6 +42,7 @@ export default function RootLayout() {
         <Tabs.Screen 
           name="brands"
           options={{
+            headerShown: false,
             tabBarIcon: ({ color }) => <MaterialIcons name="local-offer" size={24} color={color} />,
             title: 'Brands'
           }}
@@ -49,6 +50,7 @@ export default function RootLayout() {
         <Tabs.Screen 
           name="search"
           options={{
+            headerShown: false,
             tabBarIcon: ({ color }) => <MaterialIcons name="search" size={24} color={color} />,
             title: 'Search'
           }}
@@ -56,6 +58,7 @@ export default function RootLayout() {
         <Tabs.Screen 
           name="cart"
           options={{
+            headerShown: false,
             tabBarIcon: ({ color }) => <MaterialIcons name="shopping-cart" size={24} color={color} />,
             title: 'Cart'
           }}
@@ -63,6 +66,7 @@ export default function RootLayout() {
         <Tabs.Screen 
           name="profile"
           options={{
+            headerShown: false,
             tabBarIcon: ({ color }) => <MaterialIcons name="person" size={24} color={color} />,
             title: 'Profile'
           }}

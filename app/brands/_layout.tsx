@@ -6,15 +6,10 @@ export default function BrandsLayout() {
         <Stack>
           <Stack.Screen name="index" options={{ 
             headerShown: true,
-            headerTitle: () => (
-                <Image
-                    source={require('../../assets/images/logo.png')}
-                    style={{ width: 120, height: 40, resizeMode: 'contain' }}
-                />
-                ),
-                headerTitleAlign: 'center',
-            }}
-            />
+            headerTitle: 'Brands',
+            headerTitleAlign: 'center',
+          }}
+        />
         </Stack>
       );
     }
