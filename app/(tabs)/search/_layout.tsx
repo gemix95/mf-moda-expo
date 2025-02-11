@@ -18,6 +18,24 @@ export default function SearchLayout() {
           presentation: 'card'
         })} 
       />
+
+      <Stack.Screen 
+        name="catalog" 
+        options={({ route }) => ({ 
+          title: `${(route.params as { subCategory?: string })?.subCategory || ''}`,
+          headerBackTitle: 'Back',
+          presentation: 'card'
+        })} 
+      />
+
+      <Stack.Screen 
+        name="product" 
+        options={({ route }) => ({ 
+          title: `${(route.params as { brand?: string })?.brand || ''}`,
+          headerBackTitle: 'Back',
+          presentation: 'card'
+        })} 
+      />
     </Stack>
   );
 }

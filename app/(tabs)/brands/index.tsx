@@ -81,7 +81,7 @@ export default function BrandsScreen() {
                     style={styles.brandNameContainer}
                     onPress={() => {
                       router.push({
-                        pathname: '/catalog',
+                        pathname: '/brands/catalog',
                         params: {
                           sector: selectedSector,
                           brand: brand

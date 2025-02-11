@@ -44,7 +44,7 @@ export default function HomeScreen() {
           key={collection.id}
           onPress={() => {
               router.push({
-                pathname: '/catalog',
+                pathname: '/home/catalog',
                 params: {
                   sector: collection.body.sector,
                   subCategory: collection.body.subCategory,

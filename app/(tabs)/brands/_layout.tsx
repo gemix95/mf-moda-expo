@@ -8,6 +8,24 @@ export default function BrandsLayout() {
         headerTitle: 'Brands',
         headerTitleAlign: 'center',
       }} />
+
+      <Stack.Screen 
+        name="catalog" 
+        options={({ route }) => ({ 
+          title: `${(route.params as { brand?: string })?.brand || ''}`,
+          headerBackTitle: 'Back',
+          presentation: 'card'
+        })} 
+      />
+
+      <Stack.Screen 
+        name="product" 
+        options={({ route }) => ({ 
+          title: `${(route.params as { brand?: string })?.brand || ''}`,
+          headerBackTitle: 'Back',
+          presentation: 'card'
+        })} 
+      />
     </Stack>
   );
 }

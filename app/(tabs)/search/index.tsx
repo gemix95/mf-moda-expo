@@ -108,7 +108,7 @@ export default function SearchScreen() {
                     style={styles.subCategoryItem}
                     onPress={() => {
                       router.push({
-                        pathname: '/catalog',
+                        pathname: '/search/catalog',
                         params: {
                           countryCode: 'IT',
                           sector: selectedSector,
