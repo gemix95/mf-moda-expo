@@ -105,8 +105,7 @@ export const api = {
       },
       body: JSON.stringify(params),
     });
-    console.log(response.url)
-    console.log(params)
+    
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }

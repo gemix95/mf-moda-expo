@@ -4,6 +4,8 @@ import { useLocalSearchParams } from 'expo-router';
 import { api } from '@/services/api';
 import { Product } from '@/types/product';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { router } from 'expo-router';
+import { useProductStore } from '@/types/productStore';
 
 export default function CatalogScreen() {
   const { sector, subCategory, brand, onlySale, collectionId } = useLocalSearchParams<{ 
@@ -52,62 +54,77 @@ export default function CatalogScreen() {
     }
   };
 
-  const renderProduct = ({ item }: { item: Product }) => (
-    <TouchableOpacity style={styles.productCard}>
-      <Image 
-        source={{ uri: item.images[0] }} 
-        style={styles.productImage}
-      />
-      {item.inSale && item.originalPrice && (
-        <View style={styles.saleTag}>
-          <Text style={styles.saleText}>
-            {Math.round((1 - item.price / item.originalPrice) * 100)}%
-          </Text>
-        </View>
-      )}
-      <View style={styles.productInfo}>
-        <Text style={styles.brandName}>{item.brand}</Text>
-        <Text style={styles.productTitle} numberOfLines={2}>{item.title}</Text>
-        <View style={styles.priceContainer}>
-          {item.originalPrice && (
-            <>
-              <Text style={[styles.price, styles.originalPrice]}>
-                € {item.originalPrice.toFixed(2)}
-              </Text>
-              <Text style={styles.salePrice}>
-                € {item.price.toFixed(2)}
-              </Text>
-            </>
-          )}
-          {!item.originalPrice && (
-            <Text style={styles.price}>
-              € {item.price.toFixed(2)}
-            </Text>
-          )}
-        </View>
-        <Text style={styles.season}>{item.season}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
   return (
-    <FlatList
-      data={products}
-      renderItem={renderProduct}
-      keyExtractor={item => item.id}
-      numColumns={2}
-      contentContainerStyle={styles.container}
-    />
-  );
-}
+    <View style={styles.container}>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <LoadingScreen />
+        </View>
+      ) : (
+        <View style={styles.catalogContainer}>
+          <FlatList
+            data={products}
+            numColumns={2}
+            renderItem={({ item }) => (
+              <TouchableOpacity 
+                style={styles.productCard}
+                onPress={() => {
+                  useProductStore.getState().setSelectedProduct(item);
+                  router.push(`/product`);
+                }}
+              >
+                <Image
+                  source={{ uri: item.images[0] }}
+                  style={styles.productImage}
+                  resizeMode="cover"
+                />
+                {item.originalPrice && (
+                  <View style={styles.saleTag}>
+                    <Text style={styles.saleText}>
+                      -{Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}%
+                    </Text>
+                  </View>
+                )}
+                <View style={styles.productInfo}>
+                  <Text style={styles.brandName}>{item.brand}</Text>
+                  <Text style={styles.productTitle} numberOfLines={2}>{item.title}</Text>
+                  <View style={styles.priceContainer}>
+                    {item.originalPrice && (
+                      <>
+                        <Text style={[styles.price, styles.originalPrice]}>
+                          € {item.originalPrice.toFixed(2)}
+                        </Text>
+                        <Text style={styles.salePrice}>
+                          € {item.price.toFixed(2)}
+                        </Text>
+                      </>
+                    )}
+                    {!item.originalPrice && (
+                      <Text style={styles.price}>
+                        € {item.price.toFixed(2)}
+                      </Text>
+                    )}
+                  </View>
+                  <Text style={styles.season}>{item.season}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+            keyExtractor={item => item.id}
+            contentContainerStyle={styles.container}
+          />
+      </View>
+    )}
+  </View>
+)}
 
 const styles = StyleSheet.create({
   container: {
-    padding: 8,
+    backgroundColor: '#fff',
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   productCard: {
     flex: 1,
@@ -123,7 +140,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     resizeMode: 'contain',
   },
-  
   saleTag: {
     position: 'absolute',
     top: 250,
@@ -173,5 +189,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
     marginTop: 4,
+  },
+  catalogContainer: {
+    padding: 8,
   },
 });

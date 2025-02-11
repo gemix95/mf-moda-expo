@@ -5,6 +5,7 @@ import { api } from '@/services/api';
 import { ScrollablePicker } from '@/components/ScrollablePicker';
 import { router } from 'expo-router';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { NewArrivalsBanner } from '@/components/NewArrivalsBanner';
 
 export default function SearchScreen() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -63,6 +64,8 @@ export default function SearchScreen() {
       />
 
       <ScrollView style={styles.categoriesContainer}>
+        <NewArrivalsBanner />
+
         {currentSectorData?.categoriesInSale?.length > 0 && (
           <View style={styles.categorySection}>
             <TouchableOpacity
@@ -105,7 +108,7 @@ export default function SearchScreen() {
                     style={styles.subCategoryItem}
                     onPress={() => {
                       router.push({
-                        pathname: '/search/catalog',
+                        pathname: '/catalog',
                         params: {
                           countryCode: 'IT',
                           sector: selectedSector,

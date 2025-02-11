@@ -8,20 +8,12 @@ export default function HomeLayout() {
         headerShown: true,
         headerTitle: () => (
             <Image
-                source={require('../../../assets/images/logo.png')}
+                source={require('@/assets/images/logo.png')}
                 style={{ width: 120, height: 40, resizeMode: 'contain' }}
             />
             ),
             headerTitleAlign: 'center',
         }}
-        />
-        <Stack.Screen 
-        name="catalog" 
-        options={({ route }) => ({ 
-          title: `${(route.params as { title?: string })?.title || ''}`,
-          headerBackTitle: 'Back',
-          presentation: 'card'
-        })} 
         />
     </Stack>
   );
