@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, FlatList, Image, Dimensions, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { Product } from '@/types/product';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface ProductViewProps {
   product: Product;
@@ -13,6 +14,7 @@ export function ProductView({ product }: ProductViewProps) {
   return (
     <View style={styles.container}>
       <FlatList
+        style={styles.flatList}
         data={product.images}
         horizontal
         pagingEnabled
@@ -63,9 +65,15 @@ export function ProductView({ product }: ProductViewProps) {
           )}
         </View>
 
-        <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.addButtonText}>Add to cart</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.addButton}>
+            <Text style={styles.addButtonText}>Add to cart</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.wishlistButton}>
+            <MaterialIcons name="bookmark-border" size={24} color="#000" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -78,6 +86,9 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
     },
+    flatList: { 
+        marginTop: 0
+    },
     image: {
       width,
       height: width * 1.2,
@@ -85,7 +96,7 @@ const styles = StyleSheet.create({
     pagination: {
       flexDirection: 'row',
       position: 'absolute',
-      top: width * 1.3,
+      top: width * 1.25,
       width: '100%',
       justifyContent: 'center',
       gap: 8,
@@ -100,7 +111,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#000',
     },
     details: {
-      padding: 16,
+      paddingHorizontal: 16,
+      paddingBottom: 16
     },
     brand: {
       fontSize: 32,
@@ -125,7 +137,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       gap: 8,
-      marginTop: 8,
+      marginBottom: 16
     },
     price: {
       fontSize: 14,
@@ -135,7 +147,13 @@ const styles = StyleSheet.create({
       textDecorationLine: 'line-through',
       color: '#999',
     },
+    buttonsContainer: {
+      flexDirection: 'row',
+      gap: 12,
+      alignItems: 'center',
+    },
     addButton: {
+      flex: 1,
       backgroundColor: '#000',
       padding: 16,
       borderRadius: 8,
@@ -145,5 +163,11 @@ const styles = StyleSheet.create({
       color: '#fff',
       fontSize: 16,
       fontWeight: 'light',
+    },
+    wishlistButton: {
+      padding: 14,
+      borderRadius: 8,
+      borderWidth: 0.5,
+      borderColor: '#000',
     },
   });

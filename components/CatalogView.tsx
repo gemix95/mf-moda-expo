@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     },
     productCard: {
       flex: 1,
-      margin: 8,
+      margin: 4,
       backgroundColor: '#fff',
       borderRadius: 8,
       overflow: 'hidden',
