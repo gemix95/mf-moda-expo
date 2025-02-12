@@ -2,12 +2,14 @@ import { View, Text, StyleSheet, FlatList, Image, Dimensions, TouchableOpacity }
 import React, { useState } from 'react';
 import { Product } from '@/types/product';
 import { MaterialIcons } from '@expo/vector-icons';
+import { SizeSelector } from '@/components/SizeSelector';
 
 interface ProductViewProps {
   product: Product;
 }
 
 export function ProductView({ product }: ProductViewProps) {
+  const [showSizeSelector, setShowSizeSelector] = useState(false);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -66,7 +68,10 @@ export function ProductView({ product }: ProductViewProps) {
         </View>
 
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.addButton}>
+          <TouchableOpacity 
+            style={styles.addButton}
+            onPress={() => setShowSizeSelector(true)}
+          >
             <Text style={styles.addButtonText}>Add to cart</Text>
           </TouchableOpacity>
           
@@ -75,6 +80,17 @@ export function ProductView({ product }: ProductViewProps) {
           </TouchableOpacity>
         </View>
       </View>
+
+      <SizeSelector
+        isVisible={showSizeSelector}
+        onClose={() => setShowSizeSelector(false)}
+        onSelectSize={(selectedSize) => {
+          console.log('Selected size:', selectedSize);
+          // Handle adding to cart here
+        }}
+        sizes={product.sizes}
+        productPrice={product.price}
+      />
     </View>
   );
 }
