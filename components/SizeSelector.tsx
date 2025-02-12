@@ -1,6 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { ProductSize } from '@/types/product';
+import { Alert } from 'react-native';
+import { useCartStore } from '@/services/cartManager';
 
 interface SizeSelectorProps {
   isVisible: boolean;
@@ -32,6 +34,20 @@ export function SizeSelector({ isVisible, onClose, onSelectSize, sizes, productP
       }).start();
     }
   }, [isVisible]);
+
+  const addToCart = useCartStore(state => state.addItem);
+
+  const handleAddToCart = async () => {
+    if (selectedSize) {
+      const result = await addToCart(selectedSize);
+      if (result.success) {
+        onSelectSize(selectedSize);
+        onClose();
+      } else {
+        Alert.alert('Cannot Add to Cart', result.error);
+      }
+    }
+  };
 
   return (
     <>
@@ -96,12 +112,7 @@ export function SizeSelector({ isVisible, onClose, onSelectSize, sizes, productP
             !selectedSize && styles.addButtonDisabled
           ]}
           disabled={!selectedSize}
-          onPress={() => {
-            if (selectedSize) {
-              onSelectSize(selectedSize);
-              onClose();
-            }
-          }}
+          onPress={handleAddToCart}
         >
           <Text style={styles.addButtonText}>Aggiungi al carrello</Text>
         </TouchableOpacity>

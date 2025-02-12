@@ -1,7 +1,9 @@
 import { Tabs } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useCartStore } from '@/services/cartManager';
 
-export default function TabsLayout() {
+export default function TabLayout() {
+  const cartItemsCount = useCartStore(state => state.getTotalItems());
   return (
     <Tabs screenOptions={{ 
       headerShown: false,
@@ -32,12 +34,12 @@ export default function TabsLayout() {
           title: 'Search'
         }}
       />
-      <Tabs.Screen 
+      <Tabs.Screen
         name="cart"
         options={{
-          headerShown: false,
+          tabBarLabel: 'Carrello',
           tabBarIcon: ({ color }) => <MaterialIcons name="shopping-cart" size={24} color={color} />,
-          title: 'Cart'
+          tabBarBadge: cartItemsCount > 0 ? cartItemsCount : undefined,
         }}
       />
       <Tabs.Screen 

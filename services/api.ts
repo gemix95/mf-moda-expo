@@ -1,3 +1,4 @@
+import { CartAvailabilityResponse } from '@/types/cart';
 import { Config } from '@/types/config';
 import { HomepageResponse } from '@/types/homepage';
 import { Product } from '@/types/product';
@@ -32,6 +33,7 @@ interface CategoriesResponse {
 const BASE_URL = 'https://michelefranzese.moda';
 
 const defaultHeaders = {
+  'countryCode': 'IT',
   'language': 'it',
   'mf-moda-token': 'vtyujbiuqtvu65699baj90',
   'app-version': Constants.expoConfig?.version || '1.0.0',
@@ -134,6 +136,23 @@ export const api = {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ sector }),
+    });
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    return response.json();
+  },
+
+  async getCartAvailability(data: any): Promise<CartAvailabilityResponse> {
+    const response = await fetch(`${BASE_URL}/api/v1/cart/availability`, {
+      method: 'POST',
+      headers: {
+        ...defaultHeaders,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
     
     if (!response.ok) {
