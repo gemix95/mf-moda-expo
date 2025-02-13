@@ -1,4 +1,4 @@
-import { CartAvailabilityResponse } from '@/types/cart';
+import { CartAvailabilityResponse, CheckoutPayload, CheckoutResponse } from '@/types/cart';
 import { Config } from '@/types/config';
 import { HomepageResponse } from '@/types/homepage';
 import { Product } from '@/types/product';
@@ -146,7 +146,7 @@ export const api = {
   },
 
   async getCartAvailability(data: any): Promise<CartAvailabilityResponse> {
-    const response = await fetch(`${BASE_URL}/api/v1/cart/availability`, {
+    const response = await fetch(`${BASE_URL}/api/v1/cart/automaticCoupon`, {
       method: 'POST',
       headers: {
         ...defaultHeaders,
@@ -159,6 +159,23 @@ export const api = {
       throw new Error('Network response was not ok');
     }
     
+    return response.json();
+  },
+  // Add to your api object
+  async createCheckout(payload: CheckoutPayload): Promise<CheckoutResponse> {
+    const response = await fetch(`${BASE_URL}/api/v1/cart/checkout`, {
+      method: 'POST',
+      headers: {
+        ...defaultHeaders,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+  
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  
     return response.json();
   },
 };
