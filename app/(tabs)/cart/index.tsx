@@ -99,7 +99,6 @@ export default function CartScreen() {
         {cartData?.items.map((item) => (
           <View key={item.variantId} style={styles.cartItem}>
             <Image source={{ uri: item.imageUrl }} style={styles.itemImage} />
-            // In the items mapping section
             <View style={styles.itemDetails}>
               <Text style={styles.brandName}>{item.title}</Text>
               <Text style={styles.itemDescription}>{item.description}</Text>
@@ -137,7 +136,6 @@ export default function CartScreen() {
         ))}
       </ScrollView>
 
-      // Update the footer section
       <View style={styles.footer}>
         {cartData?.totalCart?.totalSavings && cartData.totalCart.totalSavings > 0 && (
           <View style={styles.totalContainer}>
