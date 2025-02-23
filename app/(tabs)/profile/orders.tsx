@@ -59,7 +59,10 @@ export default function OrdersScreen() {
                 </Text>
                 <Text style={styles.orderNumber}>Ordine #{order.orderNumber}</Text>
                 <Text style={styles.totalAmount}>
-                  {order.totalPrice.currencyCode} {order.totalPrice.amount}
+                  {new Intl.NumberFormat('it-IT', {
+                    style: 'currency',
+                    currency: order.totalPrice.currencyCode
+                  }).format(Number(order.totalPrice.amount))}
                 </Text>
                 {order.canceledAt && (
                   <View style={styles.cancelledBadge}>
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
   orderCard: {
     marginHorizontal: 16,
     marginVertical: 8,
-    padding: 16,
+    padding: 8,
     backgroundColor: '#fff',
     borderRadius: 8,
     borderWidth: 1,
