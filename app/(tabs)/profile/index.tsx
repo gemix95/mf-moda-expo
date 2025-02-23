@@ -1,15 +1,18 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
+import { useAuthStore } from '@/services/authStore';
 
 export default function ProfileScreen() {
+  var customerInfo = useAuthStore((state) => state.customerInfo);
+
   const sections = [
     {
-      title: 'Benvenuto',
+      title: customerInfo?.displayName ? `Ciao, ${customerInfo.displayName}` : 'Benvenuto',
       items: [
-        { type: "login", icon: 'person-outline', title: 'Il tuo Profilo', external: false },
+        { type: "profile", icon: 'person-outline', title: 'Il tuo Profilo', external: false },
         { type: "wishlist", icon: 'bookmark-outline', title: 'Lista dei Desideri', external: false },
         { type: "preferences", icon: 'thumb-up', title: 'Preferenze Shopping', external: false },
         { type: "notification", icon: 'notifications-none', title: 'Notifiche', external: false },
@@ -50,8 +53,12 @@ export default function ProfileScreen() {
               key={itemIndex}
               style={styles.menuItem}
               onPress={() => {
-                if (item.type === 'login') {
-                  router.push('../login');
+                if (item.type === 'profile') {
+                  if (customerInfo) {
+                    router.push('/(tabs)/profile/details');
+                  } else {
+                    router.push('../../login');
+                  }
                 }
               }}
             >

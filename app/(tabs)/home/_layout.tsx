@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 export default function HomeLayout() {
   return (
@@ -7,10 +7,10 @@ export default function HomeLayout() {
       <Stack.Screen name="index" options={{ 
         headerShown: true,
         headerTitle: () => (
-            <Image
-                source={require('@/assets/images/logo.png')}
-                style={{ width: 120, height: 40, resizeMode: 'contain' }}
-            />
+              <View style={styles.header}>
+                <Text style={styles.headerTitle}>MICHELE FRANZESE</Text>
+                <Text style={styles.headerSubtitle}>MODA</Text>
+              </View>
             ),
             headerTitleAlign: 'center',
         }}
@@ -36,3 +36,20 @@ export default function HomeLayout() {
     </Stack>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  headerSubtitle: {
+    fontSize: 16,
+    color: 'black',
+  },
+});

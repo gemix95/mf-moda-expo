@@ -8,8 +8,8 @@ import { useAuthStore } from '@/services/authStore';
 import { LoadingScreen } from '@/components/LoadingScreen';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('enyons@mailnesia.com');
+  const [password, setPassword] = useState('enyons@mailnesia.com');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -45,10 +45,6 @@ export default function LoginScreen() {
       {isLoading && <LoadingScreen />}
       
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="chevron-back" size={24} color="white" />
-          <Text style={styles.backText}>Back</Text>
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>MICHELE FRANZESE</Text>
         <Text style={styles.headerSubtitle}>MODA</Text>
       </View>

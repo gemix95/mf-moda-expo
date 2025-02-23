@@ -1,5 +1,4 @@
 import { Stack } from 'expo-router';
-import { Image } from 'react-native';
 
 export default function ProfileLayout() {
   return (
@@ -9,6 +8,33 @@ export default function ProfileLayout() {
         headerTitle: 'Profile',
         headerTitleAlign: 'center',
       }}
+      />
+
+    <Stack.Screen 
+        name="details" 
+        options={() => ({ 
+          title: `Il tuo Profilo`,
+          headerBackTitle: 'Back',
+          presentation: 'card'
+        })} 
+      />
+
+    <Stack.Screen 
+        name="user-data" 
+        options={() => ({ 
+          title: `I tuoi Dati`,
+          headerBackTitle: 'Back',
+          presentation: 'card'
+        })} 
+      />
+
+    <Stack.Screen 
+        name="orders" 
+        options={() => ({ 
+          title: `I tuoi Ordini`,
+          headerBackTitle: 'Back',
+          presentation: 'card'
+        })} 
       />
     </Stack>
   );

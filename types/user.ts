@@ -29,3 +29,33 @@ export interface LoginResponse {
     provinceCode: string | null;
     zip: string | null;
   }
+
+  export interface OrderResponse {
+    numberOfOrders: string;
+    orders: Order[];
+  }
+  
+  export interface Order {
+    orderNumber: number;
+    processedAt: string;
+    items: OrderItem[];
+    totalPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+    fulfillmentStatus: string;
+    canceledAt?: string;
+  }
+
+  export interface OrderItem {
+    title: string;
+    quantity: number;
+    imageUrl: string;
+    vendor?: string;
+    size?: string;
+    price: {
+      originalPrice: string;
+      discountedPrice: string;
+      currencyCode: string;
+    };
+  }
