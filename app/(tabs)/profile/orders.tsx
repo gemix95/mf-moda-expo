@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/services/authStore';
 import { api } from '@/services/api';
@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { Order } from '@/types/user';
 import { MaterialIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 export default function OrdersScreen() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -40,6 +41,13 @@ export default function OrdersScreen() {
     <ScrollView style={styles.container}>
         <View style={styles.section}>
         {orders.map((order) => (
+        <TouchableOpacity 
+            key={order.orderNumber} 
+            onPress={() => router.push({
+              pathname: '/(tabs)/profile/order-details',
+              params: { order: JSON.stringify(order) }
+            })}
+          >
           <View key={order.orderNumber} style={styles.orderCard}>
             <View style={styles.itemContainer}>
               <View style={styles.imageWrapper}>
@@ -66,7 +74,7 @@ export default function OrdersScreen() {
                 </Text>
                 {order.canceledAt && (
                   <View style={styles.cancelledBadge}>
-                    <Text style={styles.cancelledText}>Annullato</Text>
+                    <Text style={styles.cancelledText}>Reso</Text>
                   </View>
                 )}
               </View>
@@ -75,6 +83,7 @@ export default function OrdersScreen() {
               </View>
             </View>
           </View>
+          </TouchableOpacity>
         ))}
         </View>
     </ScrollView>

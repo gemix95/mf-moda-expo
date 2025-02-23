@@ -36,6 +36,18 @@ export default function ProfileLayout() {
           presentation: 'card'
         })} 
       />
+
+    <Stack.Screen 
+        name="order-details" 
+        options={({ route }) => {
+          const order = route.params && 'order' in route.params ? JSON.parse(route.params.order as string) : null;
+          return {
+            title: order ? `Ordine #${order.orderNumber}` : '',
+            headerBackTitle: 'Back',
+            presentation: 'card'
+          };
+        }} 
+      />
     </Stack>
   );
 }

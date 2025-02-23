@@ -55,7 +55,7 @@ export interface LoginResponse {
     size?: string;
     price: {
       originalPrice: string;
-      discountedPrice: string;
-      currencyCode: string;
+      discountedPrice?: string;
+      currencyCode?: string;
     };
   }
