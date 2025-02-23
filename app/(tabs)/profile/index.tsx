@@ -2,39 +2,40 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { router } from 'expo-router';
 
 export default function ProfileScreen() {
   const sections = [
     {
       title: 'Benvenuto',
       items: [
-        { icon: 'person-outline', title: 'Il tuo Profilo', external: false },
-        { icon: 'bookmark-outline', title: 'Lista dei Desideri', external: false },
-        { icon: 'thumb-up', title: 'Preferenze Shopping', external: false },
-        { icon: 'notifications-none', title: 'Notifiche', external: false },
-        { icon: 'info-outline', title: 'Pagine informative', external: false },
+        { type: "login", icon: 'person-outline', title: 'Il tuo Profilo', external: false },
+        { type: "wishlist", icon: 'bookmark-outline', title: 'Lista dei Desideri', external: false },
+        { type: "preferences", icon: 'thumb-up', title: 'Preferenze Shopping', external: false },
+        { type: "notification", icon: 'notifications-none', title: 'Notifiche', external: false },
+        { type: "infos", icon: 'info-outline', title: 'Pagine informative', external: false },
       ]
     },
     {
       title: 'Lingua e Regione',
       items: [
-        { icon: 'language', title: 'Italiano', subtitle: 'Lingua', external: false },
-        { icon: 'outlined-flag', title: 'Italia (EUR €)', subtitle: 'Regione', external: false },
+        { type: "language", icon: 'language', title: 'Italiano', subtitle: 'Lingua', external: false },
+        { type: "country", icon: 'outlined-flag', title: 'Italia (EUR €)', subtitle: 'Regione', external: false },
       ]
     },
     {
       title: 'Inviaci un feedback',
       items: [
-        { icon: 'star-outline', title: 'Valuta l\'app', external: true },
-        { icon: 'verified-user', title: 'Trust Pilot', external: true },
+        { type: "review", icon: 'star-outline', title: 'Valuta l\'app', external: true },
+        { type: "trust-pilot", icon: 'verified-user', title: 'Trust Pilot', external: true },
       ]
     },
     {
       title: 'Social',
       items: [
-        { icon: 'camera-alt', title: 'Instagram', external: true },
-        { icon: 'facebook', title: 'Facebook', external: true },
-        { icon: 'shopping-bag', title: 'The Best Shops', external: true },
+        { type: "instagram", icon: 'camera-alt', title: 'Instagram', external: true },
+        { type: "facebook", icon: 'facebook', title: 'Facebook', external: true },
+        { type: "best", icon: 'shopping-bag', title: 'The Best Shops', external: true },
       ]
     }
   ];
@@ -48,6 +49,11 @@ export default function ProfileScreen() {
             <TouchableOpacity 
               key={itemIndex}
               style={styles.menuItem}
+              onPress={() => {
+                if (item.type === 'login') {
+                  router.push('../login');
+                }
+              }}
             >
               <View style={styles.leftContent}>
                 <MaterialIcons name={item.icon as keyof typeof MaterialIcons.glyphMap} size={24} color="#000" />

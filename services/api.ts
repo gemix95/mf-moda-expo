@@ -2,6 +2,7 @@ import { CartAvailabilityResponse, CheckoutPayload, CheckoutResponse } from '@/t
 import { Config } from '@/types/config';
 import { HomepageResponse } from '@/types/homepage';
 import { Product } from '@/types/product';
+import { LoginResponse } from '@/types/user';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
@@ -177,5 +178,23 @@ export const api = {
     }
   
     return response.json();
+  },
+  async login(email: string, password: string): Promise<LoginResponse> {
+    const response = await fetch(`${BASE_URL}/api/v1/user/login`, {
+      method: 'POST',
+      headers: {
+        ...defaultHeaders,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+  
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Login failed');
+    }
+  
+    return data;
   },
 };
