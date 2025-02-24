@@ -20,7 +20,10 @@ export default function OrdersScreen() {
         setLoading(true);
         if (token) {
           const response = await api.fetchOrders(token);
-          setOrders(response.orders || []); // Add fallback empty array
+          const sortedOrders = (response.orders || []).sort((a, b) => 
+            new Date(b.processedAt).getTime() - new Date(a.processedAt).getTime()
+          );
+          setOrders(sortedOrders);
         }
       } catch (error) {
         console.error('Failed to fetch orders:', error);
