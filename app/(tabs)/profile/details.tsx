@@ -11,7 +11,7 @@ export default function CustomerProfileScreen() {
   const menuItems = [
     { icon: 'person-outline', title: 'I tuoi dati', route: '/(tabs)/profile/user-data' },
     { icon: 'local-shipping', title: 'I tuoi ordini', route: '/(tabs)/profile/orders' },
-    { icon: 'location-on', title: 'I tuoi indirizzi', route: '' },
+    { icon: 'location-on', title: 'I tuoi indirizzi', route: '/(tabs)/profile/addresses' },
     { icon: 'card-giftcard', title: 'Programma fedeltà', route: '' },
   ];
 

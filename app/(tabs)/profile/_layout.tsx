@@ -1,4 +1,5 @@
-import { Stack } from 'expo-router';
+import { Link, Stack } from 'expo-router';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 export default function ProfileLayout() {
   return (
@@ -48,6 +49,41 @@ export default function ProfileLayout() {
           };
         }} 
       />
+    <Stack.Screen 
+      name="addresses" 
+      options={() => ({ 
+        title: 'I tuoi Indirizzi',
+        headerBackTitle: 'Back',
+        presentation: 'card',
+        headerRight: () => (
+          <Link href="/(tabs)/profile/new-address" asChild>
+          <TouchableOpacity style={styles.addButton}>
+            <Text style={styles.addButtonText}>Aggiungi</Text>
+          </TouchableOpacity>
+        </Link>
+        )
+      })} 
+    />
+    <Stack.Screen 
+      name="new-address" 
+      options={() => ({ 
+        title: 'Nuovo Indirizzo',
+        headerBackTitle: 'Back',
+        presentation: 'card'
+      })} 
+    />
     </Stack>
   );
 }
+
+const styles = StyleSheet.create({
+  addButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  addButtonText: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: 500,
+  },
+});
