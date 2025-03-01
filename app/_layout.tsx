@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import React from 'react';
+import { useCountryStore } from '@/services/countryStore';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -14,6 +15,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded) {
+      useCountryStore.getState().initializeCountry();
       SplashScreen.hideAsync();
     }
   }, [loaded]);

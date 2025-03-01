@@ -1,12 +1,34 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import { useAuthStore } from '@/services/authStore';
+import { useCountryStore } from '@/services/countryStore';
 
 export default function ProfileScreen() {
   var customerInfo = useAuthStore((state) => state.customerInfo);
+  const { selectedCountry } = useCountryStore();
+  
+  // Format the country display text
+  const countryDisplayText = selectedCountry 
+    ? `${selectedCountry.name} (${selectedCountry.currency.isoCode} ${selectedCountry.currency.symbol})`
+    : 'Italia (EUR €)';
+
+  const handleMenuPress = (item: any) => {
+    switch (item.type) {
+      case 'profile':
+        if (customerInfo) {
+          router.push('/(tabs)/profile/details');
+        } else {
+          router.push('../../login');
+        }
+        break;
+      case 'country':
+        router.push('/(tabs)/profile/select-country');
+        break;
+    }
+  };
 
   const sections = [
     {
@@ -23,7 +45,7 @@ export default function ProfileScreen() {
       title: 'Lingua e Regione',
       items: [
         { type: "language", icon: 'language', title: 'Italiano', subtitle: 'Lingua', external: false },
-        { type: "country", icon: 'outlined-flag', title: 'Italia (EUR €)', subtitle: 'Regione', external: false },
+        { type: "country", icon: 'outlined-flag', title: countryDisplayText, subtitle: 'Regione', external: false },
       ]
     },
     {
@@ -52,15 +74,7 @@ export default function ProfileScreen() {
             <TouchableOpacity 
               key={itemIndex}
               style={styles.menuItem}
-              onPress={() => {
-                if (item.type === 'profile') {
-                  if (customerInfo) {
-                    router.push('/(tabs)/profile/details');
-                  } else {
-                    router.push('../../login');
-                  }
-                }
-              }}
+              onPress={() => handleMenuPress(item)}
             >
               <View style={styles.leftContent}>
                 <MaterialIcons name={item.icon as keyof typeof MaterialIcons.glyphMap} size={24} color="#000" />

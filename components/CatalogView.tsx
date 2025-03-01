@@ -5,6 +5,7 @@ import { Product } from '@/types/product';
 import { useProductStore } from '@/types/productStore';
 import { api } from '@/services/api';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { useCountryStore } from '@/services/countryStore';
 
 interface CatalogViewProps {
   sector?: string;
@@ -18,6 +19,7 @@ interface CatalogViewProps {
 export function CatalogView({ sector, subCategory, brand, onlySale, collectionId, path }: CatalogViewProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const selectedCountry = useCountryStore();
 
   useEffect(() => {
     loadProducts();
@@ -27,7 +29,7 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
     if (collectionId) {
       try {
         const response = await api.getProductsByCollection({
-          countryCode: 'IT',
+          countryCode: selectedCountry.selectedCountry?.isoCode ?? 'IT',
           collectionId
         });
         setProducts(response.products);
@@ -39,7 +41,7 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
     } else {
       try {
         const response = await api.getProducts({
-          countryCode: 'IT',
+          countryCode: selectedCountry.selectedCountry?.isoCode ?? 'IT',
           sector,
           subCategory,
           brand,
@@ -95,16 +97,16 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
                 {item.originalPrice && (
                   <>
                     <Text style={[styles.price, styles.originalPrice]}>
-                      € {item.originalPrice.toFixed(2)}
+                    {item.currencyCode} {item.originalPrice.toFixed(2)}
                     </Text>
                     <Text style={styles.salePrice}>
-                      € {item.price.toFixed(2)}
+                    {item.currencyCode} {item.price.toFixed(2)}
                     </Text>
                   </>
                 )}
                 {!item.originalPrice && (
                   <Text style={styles.price}>
-                    € {item.price.toFixed(2)}
+                    {item.currencyCode} {item.price.toFixed(2)}
                   </Text>
                 )}
               </View>

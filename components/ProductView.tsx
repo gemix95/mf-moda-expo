@@ -10,7 +10,6 @@ interface ProductViewProps {
 
 export function ProductView({ product }: ProductViewProps) {
   const [showSizeSelector, setShowSizeSelector] = useState(false);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   return (
@@ -53,16 +52,16 @@ export function ProductView({ product }: ProductViewProps) {
           {product.originalPrice && (
             <>
               <Text style={[styles.price, styles.originalPrice]}>
-                € {product.originalPrice.toFixed(2)}
+              {product.currencyCode} {product.originalPrice.toFixed(2)}
               </Text>
               <Text style={styles.salePrice}>
-                € {product.price.toFixed(2)}
+              {product.currencyCode} {product.price.toFixed(2)}
               </Text>
             </>
           )}
           {!product.originalPrice && (
             <Text style={styles.price}>
-              € {product.price.toFixed(2)}
+              {product.currencyCode} {product.price.toFixed(2)}
             </Text>
           )}
         </View>

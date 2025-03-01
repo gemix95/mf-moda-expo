@@ -72,6 +72,15 @@ export default function ProfileLayout() {
         presentation: 'card'
       })} 
     />
+    
+    <Stack.Screen 
+      name="select-country" 
+      options={() => ({ 
+        title: 'Seleziona Paese',
+        headerBackTitle: 'Back',
+        presentation: 'card'
+      })} 
+    />
     </Stack>
   );
 }

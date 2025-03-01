@@ -6,6 +6,7 @@ import { ScrollablePicker } from '@/components/ScrollablePicker';
 import { router } from 'expo-router';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { NewArrivalsBanner } from '@/components/NewArrivalsBanner';
+import { useCountryStore } from '@/services/countryStore';
 
 export default function SearchScreen() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -13,7 +14,8 @@ export default function SearchScreen() {
   const [selectedSector, setSelectedSector] = useState('Uomo');
   const [searchText, setSearchText] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
-
+  const selectedCountry = useCountryStore()
+  
   useEffect(() => {
     loadCategories();
   }, []);
@@ -110,7 +112,7 @@ export default function SearchScreen() {
                       router.push({
                         pathname: '/search/catalog',
                         params: {
-                          countryCode: 'IT',
+                          countryCode: selectedCountry.selectedCountry?.isoCode ?? 'IT',
                           sector: selectedSector,
                           subCategory: subCategory
                         }

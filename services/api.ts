@@ -1,65 +1,38 @@
 import { CartAvailabilityResponse, CheckoutPayload, CheckoutResponse } from '@/types/cart';
 import { Config } from '@/types/config';
+import { Country } from '@/types/country';
 import { HomepageResponse } from '@/types/homepage';
-import { Product } from '@/types/product';
-import { LoginResponse, Order, OrderResponse } from '@/types/user';
+import { BrandsResponse, CategoriesResponse, GetProductsParams, Product, ProductsResponse } from '@/types/product';
+import { LoginResponse, OrderResponse } from '@/types/user';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
-
-interface Sector {
-  name: string;
-  brands: string[];
-}
-
-interface BrandsResponse {
-  sectors: Sector[];
-}
-
-// Add these interfaces to your existing api.ts
-interface SubCategory {
-    category: string;
-    subCategories: string[];
-}
-  
-interface SectorData {
-    sector: string;
-    categories: SubCategory[];
-    categoriesInSale: SubCategory[];
-}
-  
-interface CategoriesResponse {
-    data: SectorData[];
-}
+// Import the raw store instead of the hook
+import { useCountryStore } from './countryStore';
 
 const BASE_URL = 'https://michelefranzese.moda';
 
-const defaultHeaders = {
-  'countryCode': 'IT',
-  'language': 'it',
-  'mf-moda-token': 'vtyujbiuqtvu65699baj90',
-  'app-version': Constants.expoConfig?.version || '1.0.0',
-  'so': `Android ${Platform.Version}`,
+// Function to get headers with country code
+const getHeaders = () => {
+    const state = useCountryStore.getState();
+    const countryCode = state.selectedCountry?.isoCode;
+    
+    let headers = {
+      'language': 'it',
+      'mf-moda-token': 'vtyujbiuqtvu65699baj90',
+      'app-version': Constants.expoConfig?.version || '1.0.0',
+      'so': `Android ${Platform.Version}`,
+      'countryCode': countryCode || 'IT',
+    };
+
+    console.log(headers)
+    return headers
 };
-
-// Add this method to your existing api object
-interface ProductsResponse {
-  products: Product[];
-}
-
-interface GetProductsParams {
-  countryCode: string;
-  subCategory?: string;
-  brand?: string;
-  sector?: string;
-  onlySale?: boolean;
-  collectionId?: string
-}
 
 export const api = {
   async getBrands(): Promise<BrandsResponse> {
     const response = await fetch(`${BASE_URL}/api/v1/json/brands`, {
       method: 'GET',
-      headers: defaultHeaders,
+      headers: getHeaders(),
     });
     
     if (!response.ok) {
@@ -69,10 +42,11 @@ export const api = {
     return response.json();
   },
   
+  // Update all other methods to use getHeaders() instead of defaultHeaders
   async getCategories(): Promise<CategoriesResponse> {
     const response = await fetch(`${BASE_URL}/api/v1/json/categories`, {
       method: 'GET',
-      headers: defaultHeaders,
+      headers: getHeaders(),
     });
     
     if (!response.ok) {
@@ -82,11 +56,13 @@ export const api = {
     return response.json();
   },
 
+  // Continue updating all other methods similarly
+  // For example:
   async getProducts(params: GetProductsParams): Promise<ProductsResponse> {
     const response = await fetch(`${BASE_URL}/api/v1/products`, {
       method: 'POST',
       headers: {
-        ...defaultHeaders,
+        ...getHeaders(),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(params),
@@ -98,12 +74,12 @@ export const api = {
 
     return response.json();
   },
-
+  
   async getProductsByCollection(params: GetProductsParams): Promise<ProductsResponse> {
     const response = await fetch(`${BASE_URL}/api/v1/products/collection`, {
       method: 'POST',
       headers: {
-        ...defaultHeaders,
+        ...getHeaders(),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(params),
@@ -119,7 +95,7 @@ export const api = {
   async getConfig(): Promise<Config> {
     const response = await fetch(`${BASE_URL}/api/v1/json/config`, {
       method: 'GET',
-      headers: defaultHeaders,
+      headers: getHeaders(),
     });
     
     if (!response.ok) {
@@ -133,7 +109,7 @@ export const api = {
     const response = await fetch(`${BASE_URL}/api/v1/json/homepage`, {
       method: 'POST',
       headers: {
-        ...defaultHeaders,
+        ...getHeaders(),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ sector }),
@@ -150,7 +126,7 @@ export const api = {
     const response = await fetch(`${BASE_URL}/api/v1/cart/automaticCoupon`, {
       method: 'POST',
       headers: {
-        ...defaultHeaders,
+        ...getHeaders(),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
@@ -167,7 +143,7 @@ export const api = {
     const response = await fetch(`${BASE_URL}/api/v1/cart/checkout`, {
       method: 'POST',
       headers: {
-        ...defaultHeaders,
+        ...getHeaders(),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
@@ -183,7 +159,7 @@ export const api = {
     const response = await fetch(`${BASE_URL}/api/v1/user/login`, {
       method: 'POST',
       headers: {
-        ...defaultHeaders,
+        ...getHeaders(),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password }),
@@ -202,7 +178,7 @@ export const api = {
     const response = await fetch(`${BASE_URL}/api/v1/user/orders`, {
       method: 'POST',
       headers: {
-        ...defaultHeaders,
+        ...getHeaders(),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ token: token }),
@@ -215,5 +191,18 @@ export const api = {
     }
   
     return dataJson.data
+  },
+
+  async fetchCountries(): Promise<[Country]> {
+      const response = await fetch(`${BASE_URL}/api/v1/json/countries`, {
+        method: 'GET',
+        headers: {
+          ...getHeaders(),
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+      return (data.availableCountries || []);
   },
 };
