@@ -23,7 +23,7 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
 
   useEffect(() => {
     loadProducts();
-  }, [sector, subCategory, brand, onlySale, collectionId]);
+  }, [sector, subCategory, brand, onlySale, collectionId, selectedCountry]);
 
   const loadProducts = async () => {
     if (collectionId) {

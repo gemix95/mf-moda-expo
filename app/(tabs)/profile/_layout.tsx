@@ -90,6 +90,24 @@ export default function ProfileLayout() {
         presentation: 'card'
       })} 
     />
+
+    <Stack.Screen 
+      name="wishlist" 
+      options={() => ({ 
+        title: 'Wishlist',
+        headerBackTitle: 'Back',
+        presentation: 'card'
+      })} 
+    />
+
+    <Stack.Screen 
+        name="product" 
+        options={({ route }) => ({ 
+          title: `${(route.params as { brand?: string })?.brand || ''}`,
+          headerBackTitle: 'Back',
+          presentation: 'card'
+        })} 
+      />
     </Stack>
   );
 }

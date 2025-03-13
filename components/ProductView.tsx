@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Product } from '@/types/product';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SizeSelector } from '@/components/SizeSelector';
+import { useWishlistStore } from '@/services/wishlistStore';
 
 interface ProductViewProps {
   product: Product;
@@ -11,6 +12,16 @@ interface ProductViewProps {
 export function ProductView({ product }: ProductViewProps) {
   const [showSizeSelector, setShowSizeSelector] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { addItem, removeItem, isInWishlist } = useWishlistStore();
+  const isWishlisted = isInWishlist(product.id);
+
+  const handleWishlist = async () => {
+    if (isWishlisted) {
+      await removeItem(product.id);
+    } else {
+      await addItem(product.id);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -74,8 +85,15 @@ export function ProductView({ product }: ProductViewProps) {
             <Text style={styles.addButtonText}>Add to cart</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.wishlistButton}>
-            <MaterialIcons name="bookmark-border" size={24} color="#000" />
+          <TouchableOpacity 
+            style={styles.wishlistButton}
+            onPress={handleWishlist}
+          >
+            <MaterialIcons 
+              name={isWishlisted ? "favorite" : "favorite-border"} 
+              size={24} 
+              color="#000" 
+            />
           </TouchableOpacity>
         </View>
       </View>

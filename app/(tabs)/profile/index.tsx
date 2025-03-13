@@ -30,6 +30,9 @@ export default function ProfileScreen() {
       case 'preferences':
         router.push('/(tabs)/profile/shopping-preferences');
         break;
+      case 'wishlist':
+        router.push('/(tabs)/profile/wishlist');
+        break;
     }
   };
 

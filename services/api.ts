@@ -224,4 +224,22 @@ export const api = {
 
     return result;
   },
+  
+  async getProductsByIds(productIds: string[]): Promise<Product[]> {
+    const response = await fetch(`${BASE_URL}/api/v1/wishlist`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ids: productIds }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch products');
+    }
+
+    const json = await response.json();
+    return json.data;
+  },
 };
