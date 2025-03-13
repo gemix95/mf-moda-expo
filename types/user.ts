@@ -8,9 +8,9 @@ export interface LoginResponse {
     acceptsMarketing: boolean;
     displayName: string;
     email: string;
-    phone: string;
+    phone: string | null
     defaultAddress: Address | null;
-    addresses: Address[];
+    addresses: Address[] | null;
   }
   
   export interface Address {
@@ -58,4 +58,22 @@ export interface LoginResponse {
       discountedPrice?: string;
       currencyCode?: string;
     };
+  }
+
+  export interface SignupResponse {
+    token: string;
+    expiresAt: string;
+    customerInfo: {
+      acceptsMarketing: boolean;
+      displayName: string;
+      email: string;
+      phone: string | null;
+    };
+  }
+  
+  export interface SignupRequest {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
   }

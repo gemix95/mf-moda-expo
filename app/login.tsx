@@ -102,9 +102,12 @@ export default function LoginScreen() {
             Shopping Experience at your hand!
           </Text>
           <Text style={styles.newCustomer}>New Customer?</Text>
-          <TouchableOpacity style={styles.signupButton}>
-            <Text style={styles.signupButtonText}>Sign up</Text>
-          </TouchableOpacity>
+          <TouchableOpacity 
+                style={styles.signupButton}
+                onPress={() => router.push('../signup')}
+              >
+                <Text style={styles.signupButtonText}>Sign up</Text>
+              </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>

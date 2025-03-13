@@ -3,7 +3,7 @@ import { Config } from '@/types/config';
 import { Country } from '@/types/country';
 import { HomepageResponse } from '@/types/homepage';
 import { BrandsResponse, CategoriesResponse, GetProductsParams, Product, ProductsResponse } from '@/types/product';
-import { LoginResponse, OrderResponse } from '@/types/user';
+import { LoginResponse, OrderResponse, SignupRequest, SignupResponse } from '@/types/user';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 // Import the raw store instead of the hook
@@ -204,5 +204,24 @@ export const api = {
 
       const data = await response.json();
       return (data.availableCountries || []);
+  },
+  
+  async signup(data: SignupRequest): Promise<SignupResponse> {
+    const response = await fetch(`${BASE_URL}/api/v1/user/signup`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error);
+    }
+
+    return result;
   },
 };
