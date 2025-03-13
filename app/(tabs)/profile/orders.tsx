@@ -40,6 +40,18 @@ export default function OrdersScreen() {
     return <LoadingScreen />;
   }
 
+  if (orders.length == 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <MaterialIcons name="shopping-bag" size={64} color="#999" />
+        <Text style={styles.emptyText}>Nessun ordine effettuato</Text>
+        <Text style={styles.emptySubtext}>
+          I tuoi ordini appariranno qui una volta effettuato l'acquisto
+        </Text>
+      </View>
+    )
+  }
+
   return (
     <ScrollView style={styles.container}>
         <View style={styles.section}>
@@ -94,6 +106,30 @@ export default function OrdersScreen() {
 }
 
 const styles = StyleSheet.create({
+  emptySubtext: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  shopButton: {
+    backgroundColor: '#000',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  shopButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  emptyContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
