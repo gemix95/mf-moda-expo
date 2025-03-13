@@ -27,6 +27,9 @@ export default function ProfileScreen() {
       case 'country':
         router.push('/(tabs)/profile/select-country');
         break;
+      case 'preferences':
+        router.push('/(tabs)/profile/shopping-preferences');
+        break;
     }
   };
 

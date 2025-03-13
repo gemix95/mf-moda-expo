@@ -81,6 +81,15 @@ export default function ProfileLayout() {
         presentation: 'card'
       })} 
     />
+
+    <Stack.Screen 
+      name="shopping-preferences" 
+      options={() => ({ 
+        title: 'Preferenze Shopping',
+        headerBackTitle: 'Back',
+        presentation: 'card'
+      })} 
+    />
     </Stack>
   );
 }

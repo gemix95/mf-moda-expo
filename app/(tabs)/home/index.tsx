@@ -5,19 +5,21 @@ import { router } from 'expo-router';
 import { api } from '@/services/api';
 import { Collection } from '@/types/homepage';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { useShoppingPreferencesStore } from '@/services/shoppingPreferencesStore';
 
 export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [banner, setBanner] = useState<{ message: string; visible: boolean } | null>(null);
   const [collections, setCollections] = useState<Collection[]>([]);
+  const { preferredSector } = useShoppingPreferencesStore();
 
   useEffect(() => {
     loadHomepage();
-  }, []);
+  }, [preferredSector]);
 
   const loadHomepage = async () => {
     try {
-      const response = await api.getHomepage('Uomo');
+      const response = await api.getHomepage(preferredSector);
       setBanner(response.data.banner);
       setCollections(response.data.collections);
     } catch (error) {
