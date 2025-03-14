@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { NewArrivalsBanner } from '@/components/NewArrivalsBanner';
 import { useCountryStore } from '@/services/countryStore';
+import { SearchProducts } from '@/components/SearchProducts';
 
 export default function SearchScreen() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -15,7 +16,9 @@ export default function SearchScreen() {
   const [searchText, setSearchText] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const selectedCountry = useCountryStore()
-  
+  const [isSearching, setIsSearching] = useState(false);
+  const currentSectorData = categories.find(item => item.sector === selectedSector);
+
   useEffect(() => {
     loadCategories();
   }, []);
@@ -40,7 +43,10 @@ export default function SearchScreen() {
     );
   };
 
-  const currentSectorData = categories.find(item => item.sector === selectedSector);
+  const handleSearchChange = (text: string) => {
+    setSearchText(text);
+    setIsSearching(!!text);
+  };
 
   return (
     <View style={styles.container}>
@@ -52,82 +58,98 @@ export default function SearchScreen() {
           style={styles.searchInput}
           placeholder="Search"
           value={searchText}
-          onChangeText={setSearchText}
+          onChangeText={handleSearchChange}
         />
+        {isSearching && (
+          <TouchableOpacity
+            onPress={() => {
+              setSearchText('');
+              setIsSearching(false);
+            }}
+          >
+            <Text style={styles.cancelButton}>Cancel</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
-      <ScrollablePicker
-        items={categories.map(item => ({
-          id: item.sector,
-          label: item.sector,
-        }))}
-        selectedId={selectedSector}
-        onSelect={setSelectedSector}
-      />
+      {isSearching ? (
+        <SearchProducts initialQuery={searchText} />
+      ) : (
+        <>
+          <ScrollablePicker
+            items={categories.map(item => ({
+              id: item.sector,
+              label: item.sector,
+            }))}
+            selectedId={selectedSector}
+            onSelect={setSelectedSector}
+          />
 
-      <ScrollView style={styles.categoriesContainer}>
-        <NewArrivalsBanner sector={selectedSector}/>
+          <ScrollView style={styles.categoriesContainer}>
+            <NewArrivalsBanner sector={selectedSector}/>
 
-        {currentSectorData?.categoriesInSale?.length > 0 && (
-          <View style={styles.categorySection}>
-            <TouchableOpacity
-              style={styles.categoryHeader}
-              onPress={() => {
-                router.push({
-                  pathname: '/search/sales',
-                  params: {
-                    sector: selectedSector,
-                    categories: JSON.stringify(currentSectorData.categoriesInSale)
-                  }
-                });
-              }}
-            >
-              <Text style={[styles.categoryTitle, styles.salesTitle]}>Sales</Text>
-              <MaterialIcons name="chevron-right" size={24} color="#468866" />
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {currentSectorData?.categories.map(({ category, subCategories }: { category: string, subCategories: string[] }) => (
-          <View key={category} style={styles.categorySection}>
-            <TouchableOpacity
-              style={styles.categoryHeader}
-              onPress={() => toggleCategory(category)}
-            >
-              <Text style={styles.categoryTitle}>{category}</Text>
-              <MaterialIcons
-                name={expandedCategories.includes(category) ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
-                size={24}
-                color="#000"
-              />
-            </TouchableOpacity>
-            
-            {expandedCategories.includes(category) && (
-              <View style={styles.subCategoriesList}>
-                {subCategories.map(subCategory => (
-                  <TouchableOpacity
-                    key={subCategory}
-                    style={styles.subCategoryItem}
-                    onPress={() => {
-                      router.push({
-                        pathname: '/search/catalog',
-                        params: {
-                          countryCode: selectedCountry.selectedCountry?.isoCode ?? 'IT',
-                          sector: selectedSector,
-                          subCategory: subCategory
-                        }
-                      });
-                    }}
-                  >
-                    <Text style={styles.subCategoryText}>{subCategory}</Text>
-                    <MaterialIcons name="chevron-right" size={24} color="#999" />
-                  </TouchableOpacity>
-                ))}
+            {currentSectorData?.categoriesInSale?.length > 0 && (
+              <View style={styles.categorySection}>
+                <TouchableOpacity
+                  style={styles.categoryHeader}
+                  onPress={() => {
+                    router.push({
+                      pathname: '/search/sales',
+                      params: {
+                        sector: selectedSector,
+                        categories: JSON.stringify(currentSectorData.categoriesInSale)
+                      }
+                    });
+                  }}
+                >
+                  <Text style={[styles.categoryTitle, styles.salesTitle]}>Sales</Text>
+                  <MaterialIcons name="chevron-right" size={24} color="#468866" />
+                </TouchableOpacity>
               </View>
             )}
-          </View>
-        ))}
-      </ScrollView>
+
+            {currentSectorData?.categories.map(({ category, subCategories }: { category: string, subCategories: string[] }) => (
+              <View key={category} style={styles.categorySection}>
+                <TouchableOpacity
+                  style={styles.categoryHeader}
+                  onPress={() => toggleCategory(category)}
+                >
+                  <Text style={styles.categoryTitle}>{category}</Text>
+                  <MaterialIcons
+                    name={expandedCategories.includes(category) ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
+                    size={24}
+                    color="#000"
+                  />
+                </TouchableOpacity>
+                
+                {expandedCategories.includes(category) && (
+                  <View style={styles.subCategoriesList}>
+                    {subCategories.map(subCategory => (
+                      <TouchableOpacity
+                        key={subCategory}
+                        style={styles.subCategoryItem}
+                        onPress={() => {
+                          router.push({
+                            pathname: '/search/catalog',
+                            params: {
+                              countryCode: selectedCountry.selectedCountry?.isoCode ?? 'IT',
+                              sector: selectedSector,
+                              subCategory: subCategory
+                            }
+                          });
+                        }}
+                      >
+                        <Text style={styles.subCategoryText}>{subCategory}</Text>
+                        <MaterialIcons name="chevron-right" size={24} color="#999" />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+              </View>
+            ))}
+          </ScrollView>
+        </>
+      )}
     </View>
   );
 }
@@ -214,5 +236,10 @@ const styles = StyleSheet.create({
   salesTitle: {
     color: '#468866',
     fontWeight: '600',
+  },
+  cancelButton: {
+    color: '#666',
+    marginLeft: 8,
+    fontSize: 14,
   },
 });

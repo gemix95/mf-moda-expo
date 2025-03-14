@@ -15,21 +15,32 @@ interface CatalogViewProps {
   onlySale?: boolean;
   collectionId?: string;
   path: string;
+  products?: Product[];
 }
 
-export function CatalogView({ sector, subCategory, brand, onlySale, collectionId, path }: CatalogViewProps) {
+export function CatalogView({ sector, subCategory, brand, onlySale, collectionId, path, products }: CatalogViewProps) {
   const [productResponse, setProductResponse] = useState<ProductsResponse>();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
   const selectedCountry = useCountryStore();
 
   useEffect(() => {
+    if (products) {
+      let response = {
+        products: products,
+        brands: [],
+        subCategories: [],
+      };
+      setProductResponse(response);
+      return;
+    }
     loadProducts();
-  }, [sector, subCategory, brand, onlySale, collectionId, selectedCountry]);
+  }, [sector, subCategory, brand, onlySale, collectionId, selectedCountry, products]);
 
   const loadProducts = async () => {
     if (collectionId) {
       try {
+        setLoading(true)
         const response = await api.getProductsByCollection({
           countryCode: selectedCountry.selectedCountry?.isoCode ?? 'IT',
           collectionId
@@ -42,6 +53,7 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
       }
     } else {
       try {
+        setLoading(true)
         const response = await api.getProducts({
           countryCode: selectedCountry.selectedCountry?.isoCode ?? 'IT',
           sector,

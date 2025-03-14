@@ -262,5 +262,23 @@ export const api = {
     }
   
     return response.json();
-  }
+  },
+
+  async searchProducts(query: string): Promise<Product[]> {
+    const response = await fetch(`${BASE_URL}/api/v1/products/search`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
+  
+    if (!response.ok) {
+      throw new Error('Search failed');
+    }
+  
+    let json = await response.json()
+    return json.data;
+  },
 };
