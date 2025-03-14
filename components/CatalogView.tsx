@@ -70,6 +70,7 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
         data={products}
         numColumns={2}
         renderItem={({ item }) => (
+          // Update the renderItem in the FlatList to include the overlay
           <TouchableOpacity 
             style={styles.productCard}
             onPress={() => {
@@ -78,11 +79,14 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
               router.push(fullPath as any);
             }}
           >
-            <Image
-              source={{ uri: item.images[0] }}
-              style={styles.productImage}
-              resizeMode="cover"
-            />
+            <View>
+              <Image
+                source={{ uri: item.images[0] }}
+                style={styles.productImage}
+                resizeMode="cover"
+              />
+              <View style={styles.imageOverlay} />
+            </View>
             {item.originalPrice && (
               <View style={styles.saleTag}>
                 <Text style={styles.saleText}>
@@ -93,6 +97,7 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
             <View style={styles.productInfo}>
               <Text style={styles.brandName}>{item.brand}</Text>
               <Text style={styles.productTitle} numberOfLines={2}>{item.title}</Text>
+              <Text style={styles.season}>{item.season}</Text>
               <View style={styles.priceContainer}>
                 {item.originalPrice && (
                   <>
@@ -110,7 +115,6 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
                   </Text>
                 )}
               </View>
-              <Text style={styles.season}>{item.season}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -122,6 +126,7 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
 
 const styles = StyleSheet.create({
     container: {
+      flex: 1,
       backgroundColor: '#fff',
     },
     loaderContainer: {
@@ -133,32 +138,38 @@ const styles = StyleSheet.create({
       flex: 1,
       margin: 4,
       backgroundColor: '#fff',
-      borderRadius: 8,
       overflow: 'hidden',
     },
     productImage: {
-      width: '90%',
-      aspectRatio: 6/9,
-      margin: 16,
+      width: '100%',
+      aspectRatio: 3/4,
+      marginVertical: 16,
       alignSelf: 'center',
-      resizeMode: 'contain',
+      resizeMode: 'cover',
+    },
+    imageOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: '#000',
+      opacity: 0.1,
+    },
+    productInfo: {
+      paddingTop: 8,
+      paddingBottom: 16,
+      backgroundColor: '#fff',
     },
     saleTag: {
       position: 'absolute',
-      top: 250,
-      left: 8,
+      top: 12,
+      left: 12,
       backgroundColor: '#468866',
       paddingHorizontal: 8,
-      paddingVertical: 2,
+      paddingVertical: 4,
       borderRadius: 16,
     },
     saleText: {
       fontSize: 12,
       color: '#fff',
       fontWeight: '400',
-    },
-    productInfo: {
-      padding: 8,
     },
     brandName: {
       fontSize: 14,
@@ -195,5 +206,6 @@ const styles = StyleSheet.create({
     },
     catalogContainer: {
       padding: 8,
+      backgroundColor: '#fff',
     },
   });
