@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { ScrollablePicker } from '@/components/ScrollablePicker';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { router } from 'expo-router';
+import { useFavoriteBrandsStore } from '@/stores/favoriteBrandsStore';
 
 export default function BrandsScreen() {
   const [sectors, setSectors] = useState<{ name: string; brands: string[] }[]>([]);
@@ -12,7 +13,10 @@ export default function BrandsScreen() {
   const [selectedSector, setSelectedSector] = useState('Uomo');
   const [searchText, setSearchText] = useState('');
 
+  const { favoriteBrands, toggleFavorite, loadFavorites } = useFavoriteBrandsStore();
+
   useEffect(() => {
+    loadFavorites();
     loadBrands();
   }, []);
 
@@ -35,7 +39,10 @@ export default function BrandsScreen() {
     .filter(brand => brand.toLowerCase().includes(searchText.toLowerCase()))
     .sort();
 
-  const groupedBrands = filteredBrands.reduce((acc, brand) => {
+  const favoriteSectionBrands = filteredBrands.filter(brand => favoriteBrands.includes(brand));
+  const otherBrands = filteredBrands.filter(brand => !favoriteBrands.includes(brand));
+
+  const groupedBrands = otherBrands.reduce((acc, brand) => {
     const firstLetter = brand[0].toUpperCase();
     if (!acc[firstLetter]) {
       acc[firstLetter] = [];
@@ -70,9 +77,15 @@ export default function BrandsScreen() {
       </View>
 
       <FlatList
-        data={sections}
-        keyExtractor={([letter]) => letter}
-        renderItem={({ item: [letter, brandsList] }) => (
+        data={[{ letter: '★', brands: favoriteSectionBrands }, ...sections]}
+        keyExtractor={item => Array.isArray(item) ? item[0] : item.letter}
+        renderItem={({ item }) => {
+          const letter = 'letter' in item ? item.letter : item[0];
+          const brandsList = 'brands' in item ? item.brands : item[1];
+          
+          if (letter === '★' && brandsList.length === 0) return null;
+
+          return (
             <View style={styles.section}>
               <Text style={styles.sectionHeader}>{letter}</Text>
               {brandsList.map((brand) => (
@@ -91,18 +104,19 @@ export default function BrandsScreen() {
                   >
                     <Text style={styles.brandName}>{brand}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => toggleFavorite(brand)}>
                     <MaterialIcons
-                      name="favorite-border"
+                      name={favoriteBrands.includes(brand) ? "favorite" : "favorite-border"}
                       size={24}
-                      color="#999"
+                      color={favoriteBrands.includes(brand) ? "#000" : "#999"}
                     />
                   </TouchableOpacity>
                 </View>
               ))}
             </View>
-          )}
-        />
+          );
+        }}
+      />
     </View>
   );
 }
