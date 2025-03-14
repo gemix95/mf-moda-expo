@@ -241,4 +241,26 @@ export const api = {
     const json = await response.json();
     return json.data;
   },
+  
+  async getCorrelatedProducts(params: {
+    countryCode: string;
+    category: string;
+    subCategory: string;
+    sector: string;
+  }): Promise<ProductsResponse> {
+    const response = await fetch(`${BASE_URL}/api/v1/products/correlated`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to fetch correlated products');
+    }
+  
+    return response.json();
+  }
 };

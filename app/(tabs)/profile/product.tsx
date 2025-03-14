@@ -15,7 +15,7 @@ export default function ProductScreen() {
           title: selectedProduct.brand
         }} 
       />
-      <ProductView product={selectedProduct} />
+      <ProductView product={selectedProduct} path='profile' />
     </>
   );
 }
