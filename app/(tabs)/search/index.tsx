@@ -66,7 +66,7 @@ export default function SearchScreen() {
       />
 
       <ScrollView style={styles.categoriesContainer}>
-        <NewArrivalsBanner />
+        <NewArrivalsBanner sector={selectedSector}/>
 
         {currentSectorData?.categoriesInSale?.length > 0 && (
           <View style={styles.categorySection}>

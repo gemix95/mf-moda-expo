@@ -1,15 +1,47 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
+import { router } from 'expo-router';
 
-export function NewArrivalsBanner() {
+interface NewArrivalsBannerProps {
+  sector: string;
+}
+
+const getCollectionId = (sector: string): number => {
+  switch (sector) {
+    case 'Donna':
+      return 611591258443;
+    case 'Uomo':
+      return 611595092299;
+    case 'Bambino':
+      return 611727147339;
+    case 'Bambina':
+      return 611727114571;
+    case 'Casa':
+      return 611725214027;
+    default:
+      return 611591258443; // Default to Donna collection
+  }
+};
+
+export function NewArrivalsBanner({ sector }: NewArrivalsBannerProps) {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity 
+      style={styles.container}
+      onPress={() => router.push({
+        pathname: '/search/catalog',
+        params: {
+          sector,
+          subCategory: null,
+          brand: null,
+          collectionId: getCollectionId(sector),
+          title: `New Arrivals ${sector}`
+        }
+      })}
+    >
       <Text style={styles.title}>New Arrivals</Text>
       <Text style={styles.subtitle}>Ogni giorno più di 150 nuovi prodotti arrivano in boutique</Text>
-      <TouchableOpacity>
-        <Text style={styles.link}>Scopri</Text>
-      </TouchableOpacity>
-    </View>
+      <Text style={styles.link}>Scopri</Text>
+    </TouchableOpacity>
   );
 }
 
