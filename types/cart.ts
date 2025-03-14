@@ -47,5 +47,5 @@ export interface CartItem {
     email?: string;
     couponCode?: string;
     couponCodes?: string[];
-    customerAccessToken?: string;
+    customerAccessToken: string | null;
   }

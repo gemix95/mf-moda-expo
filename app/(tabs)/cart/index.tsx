@@ -7,12 +7,14 @@ import { CartAvailabilityResponse } from '@/types/cart';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
+import { useAuthStore } from '@/services/authStore';
 
 export default function CartScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [cartData, setCartData] = useState<CartAvailabilityResponse['data'] | null>(null);
   const { items, removeItem } = useCartStore();
+  const { isAuthenticated, customerInfo, token } = useAuthStore.getState();
 
   // Add useFocusEffect to call API when screen is focused
   useFocusEffect(
@@ -41,7 +43,11 @@ export default function CartScreen() {
         quantity: item.quantity
       }));
 
-      const response = await api.createCheckout({ variants });
+      const response = await api.createCheckout({ 
+        variants,
+        email: customerInfo?.email,
+        customerAccessToken: token
+      });
       router.push(`/checkout?url=${encodeURIComponent(response.checkoutUrl)}`);
     } catch (error) {
       Alert.alert('Error', 'Failed to create checkout');

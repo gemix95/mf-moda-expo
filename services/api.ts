@@ -24,7 +24,6 @@ const getHeaders = () => {
       'countryCode': countryCode || 'IT',
     };
 
-    console.log(headers)
     return headers
 };
 
