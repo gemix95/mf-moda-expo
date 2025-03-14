@@ -1,5 +1,7 @@
 export interface ProductsResponse {
   products: Product[];
+  brands: string[] | null;
+  subCategories: string[] | null
 }
 
 export interface GetProductsParams {

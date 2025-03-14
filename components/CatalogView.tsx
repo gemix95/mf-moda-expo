@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { router } from 'expo-router';
-import { Product } from '@/types/product';
+import { Product, ProductsResponse } from '@/types/product';
 import { useProductStore } from '@/types/productStore';
 import { api } from '@/services/api';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { useCountryStore } from '@/services/countryStore';
+import { ScrollView } from 'react-native';
 
 interface CatalogViewProps {
   sector?: string;
@@ -17,8 +18,9 @@ interface CatalogViewProps {
 }
 
 export function CatalogView({ sector, subCategory, brand, onlySale, collectionId, path }: CatalogViewProps) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [productResponse, setProductResponse] = useState<ProductsResponse>();
   const [loading, setLoading] = useState(true);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
   const selectedCountry = useCountryStore();
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
           countryCode: selectedCountry.selectedCountry?.isoCode ?? 'IT',
           collectionId
         });
-        setProducts(response.products);
+        setProductResponse(response);
       } catch (error) {
         console.error('Error loading products:', error);
       } finally {
@@ -47,7 +49,7 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
           brand,
           onlySale,
         });
-        setProducts(response.products);
+        setProductResponse(response);
       } catch (error) {
         console.error('Error loading products:', error);
       } finally {
@@ -56,18 +58,51 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
     }
   };
 
+  const filteredProducts = productResponse?.products.filter(product => 
+    !selectedFilter || product.brand === selectedFilter || product.subCategory === selectedFilter
+  );
+
   if (loading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <LoadingScreen />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (
-    <View style={styles.catalogContainer}>
+    <View style={styles.container}>
       <FlatList
-        data={products}
+        ListHeaderComponent={
+          ((productResponse?.brands && productResponse.brands.length > 1) || 
+           (productResponse?.subCategories && productResponse.subCategories.length > 1)) ? (
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.filtersContent}
+            >
+              <TouchableOpacity
+                style={[styles.filterChip, !selectedFilter && styles.filterChipActive]}
+                onPress={() => setSelectedFilter(null)}
+              >
+                <Text style={[styles.filterText, !selectedFilter && styles.filterTextActive]}>
+                  All
+                </Text>
+              </TouchableOpacity>
+              
+              {((productResponse?.brands && productResponse.brands.length > 1) ? productResponse.brands : 
+                (productResponse?.subCategories && productResponse.subCategories.length > 1) ? productResponse.subCategories : 
+                []).map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  style={[styles.filterChip, selectedFilter === item && styles.filterChipActive]}
+                  onPress={() => setSelectedFilter(item)}
+                >
+                  <Text style={[styles.filterText, selectedFilter === item && styles.filterTextActive]}>
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          ) : null
+        }
+        data={filteredProducts}
         numColumns={2}
         renderItem={({ item }) => (
           // Update the renderItem in the FlatList to include the overlay
@@ -124,7 +159,8 @@ export function CatalogView({ sector, subCategory, brand, onlySale, collectionId
   );
 }
 
-const styles = StyleSheet.create({
+  // Update styles
+  const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
@@ -207,5 +243,29 @@ const styles = StyleSheet.create({
     catalogContainer: {
       padding: 8,
       backgroundColor: '#fff',
+    },
+    filtersContent: {
+      paddingHorizontal: 12,
+      paddingBottom: 8,
+      paddingTop: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: '#f0f0f0',
+    },
+    filterChip: {
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      borderRadius: 24,
+      backgroundColor: '#f5f5f5',
+      marginRight: 8,
+    },
+    filterChipActive: {
+      backgroundColor: '#000',
+    },
+    filterText: {
+      fontSize: 16,
+      color: '#666',
+    },
+    filterTextActive: {
+      color: '#fff',
     },
   });
