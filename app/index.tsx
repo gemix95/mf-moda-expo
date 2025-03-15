@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { router } from 'expo-router';
 import { api } from '@/services/api';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { OneSignal } from 'react-native-onesignal';
 
 export default function RootScreen() {
   useEffect(() => {
@@ -12,6 +13,8 @@ export default function RootScreen() {
     try {
       const response = await api.getConfig();
       // Store config if needed
+
+      OneSignal.initialize("d2be3f7a-6766-4204-b3de-2520c57e2e29");
       router.replace('/(tabs)/home');
     } catch (error) {
       console.error('Error loading config:', error);

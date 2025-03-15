@@ -6,6 +6,7 @@ import { api } from '@/services/api';
 import { Collection } from '@/types/homepage';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { useShoppingPreferencesStore } from '@/services/shoppingPreferencesStore';
+import { OneSignal } from 'react-native-onesignal';
 
 export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
@@ -15,6 +16,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     loadHomepage();
+    OneSignal.Notifications.requestPermission(true);
   }, [preferredSector]);
 
   const loadHomepage = async () => {
