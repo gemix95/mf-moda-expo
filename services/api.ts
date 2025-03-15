@@ -281,4 +281,79 @@ export const api = {
     let json = await response.json()
     return json.data;
   },
+
+  async addAddress(token: string, address: { 
+      firstName: string;
+      lastName: string;
+      address1: string;
+      city: string;
+      country: string;
+      phone: string;
+      province: string;
+      zip: string;
+    }) {
+    const response = await fetch(`${BASE_URL}/api/v1/user/address/add`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, address }),
+    });
+  
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+  
+    return data;
+  },
+  
+  async updateAddress(token: string, addressId: string, address: {
+    firstName: string;
+    lastName: string;
+    address1: string;
+    city: string;
+    country: string;
+    phone: string;
+    province: string;
+    zip: string;
+  }) {
+    const response = await fetch(`${BASE_URL}/api/v1/user/address/update`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, addressId, address }),
+    });
+  
+    const data = await response.json();
+   
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+  
+    return data;
+  },
+  
+  async deleteAddress(token: string, addressId: string) {
+    const response = await fetch(`${BASE_URL}/api/v1/user/address/delete`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, addressId }),
+    });
+  
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+  
+    return data;
+  },
 };

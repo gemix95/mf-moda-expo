@@ -66,8 +66,8 @@ export default function ProfileLayout() {
     />
     <Stack.Screen 
       name="new-address" 
-      options={() => ({ 
-        title: 'Nuovo Indirizzo',
+      options={({ route }) => ({ 
+        title: route.params && 'addressId' in route.params ? 'Modifica Indirizzo' : 'Nuovo Indirizzo',
         headerBackTitle: 'Back',
         presentation: 'card'
       })} 

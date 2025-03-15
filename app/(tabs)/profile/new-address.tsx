@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Switch, TouchableOpacity, ScrollView } from 'react-native';
 import { useAuthStore } from '@/services/authStore';
 import { router } from 'expo-router';
 import { api } from '@/services/api';
+import { Alert } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function NewAddressScreen() {
-  const token = useAuthStore((state) => state.token);
-  const [isDefault, setIsDefault] = useState(false);
+  const { addressId, initialData } = useLocalSearchParams<{ addressId?: string; initialData?: string }>();
+  const { token, customerInfo, updateAddresses } = useAuthStore();
+    
+  // const [isDefault, setIsDefault] = useState(false);
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -15,10 +19,87 @@ export default function NewAddressScreen() {
     city: '',
     province: '',
     zip: '',
-    country: 'Italy'
+    country: ''
   });
 
-  const handleSubmit = async () => { };
+  useEffect(() => {
+    if (initialData) {
+      const parsedData = JSON.parse(initialData);
+      setForm({
+        firstName: parsedData.firstName || '',
+        lastName: parsedData.lastName || '',
+        phone: parsedData.phone || '',
+        address1: parsedData.address1 || '',
+        city: parsedData.city || '',
+        province: parsedData.province || '',
+        zip: parsedData.zip || '',
+        country: parsedData.country || ''
+      });
+      // setIsDefault(parsedData.isDefault || false);
+    }
+  }, [initialData]);
+
+  const removeAddress = async () => {
+    Alert.alert('Conferma eliminazione', 'Sei sicuro di voler eliminare questo indirizzo?', [
+        {
+          text: 'Annulla',
+          style: 'cancel',
+        },
+        {
+          text: 'Elimina',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await api.deleteAddress(token ?? "", addressId ?? "");
+              
+              // Update addresses in auth store
+              if (customerInfo?.addresses) {
+                const updatedAddresses = customerInfo.addresses.filter(addr => addr.id !== addressId);
+                updateAddresses(updatedAddresses);
+              }
+
+              Alert.alert('Success', 'Address deleted successfully', [
+                {
+                  text: 'OK',
+                  onPress: () => router.back()
+                }
+              ]);
+            } catch (error: any) {
+              Alert.alert('Error', error.message || 'Failed to delete address');
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  const handleSubmit = async () => {
+    try {
+      let response;
+      if (addressId) {
+        response = await api.updateAddress(token ?? "", addressId, { ...form });
+      } else {
+        response = await api.addAddress(token ?? "", { ...form });
+      }
+
+      // Update addresses in auth store
+      if (customerInfo?.addresses) {
+        const updatedAddresses = addressId 
+          ? customerInfo.addresses.map((addr: { id: string }) => addr.id === addressId ? { ...addr, ...form } : addr)
+          : [...customerInfo.addresses, { id: response.data.id, ...form }];
+        updateAddresses(updatedAddresses);
+      }
+
+      Alert.alert('Success', response.data.message, [
+        {
+          text: 'OK',
+          onPress: () => router.back()
+        }
+      ]);
+    } catch (error: any) {
+      Alert.alert('Error', error.message || 'Something went wrong');
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -87,19 +168,36 @@ export default function NewAddressScreen() {
           </View>
         </View>
 
-        <View style={styles.switchContainer}>
+        <Text style={styles.label}>Paese</Text>
+        <TextInput
+          style={styles.input}
+          value={form.country}
+          onChangeText={(text) => setForm({ ...form, country: text })}
+          placeholder="Paese"
+        />
+
+        {/* <View style={styles.switchContainer}>
           <Text style={styles.label}>Indirizzo di default</Text>
           <Switch
             value={isDefault}
             onValueChange={setIsDefault}
           />
-        </View>
+        </View> */}
 
         <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-          <Text style={styles.saveButtonText}>Salva</Text>
+          <Text style={styles.saveButtonText}>{addressId ? `Modifica` : `Salva`}</Text>
         </TouchableOpacity>
-      </View>
-    </ScrollView>
+      
+      {addressId && (
+        <TouchableOpacity 
+          style={styles.deleteButton} 
+          onPress={removeAddress}
+        >
+          <Text style={styles.deleteButtonText}>Elimina indirizzo</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  </ScrollView>
   );
 }
 
@@ -153,9 +251,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   deleteButton: {
-    paddingVertical: 16,
+    paddingVertical: 24,
     alignItems: 'center',
-    marginTop: 8,
+    marginBottom: 16,
   },
   deleteButtonText: {
     color: '#ff3b30',

@@ -10,7 +10,17 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+interface AuthStore {
+  token: string | null;
+  expiresAt: string | null;
+  customerInfo: CustomerInfo | null;
+  isAuthenticated: boolean;
+  login: (token: string, expiresAt: string, customerInfo: CustomerInfo) => void;
+  logout: () => void;
+  updateAddresses: (addresses: any[]) => void;
+}
+
+export const useAuthStore = create<AuthStore>((set) => ({
   token: null,
   expiresAt: null,
   customerInfo: null,
@@ -19,4 +29,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ token, expiresAt, customerInfo, isAuthenticated: true }),
   logout: () => 
     set({ token: null, expiresAt: null, customerInfo: null, isAuthenticated: false }),
+  updateAddresses: (addresses) => 
+    set((state) => ({
+      ...state,
+      customerInfo: state.customerInfo ? { ...state.customerInfo, addresses } : null
+    })),
 }));

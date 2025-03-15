@@ -30,6 +30,17 @@ export default function AddressesScreen() {
   return (
     <ScrollView style={styles.container}>
       {addresses.map((address, index) => (
+        <TouchableOpacity 
+        onPress={() => 
+          router.push({
+            pathname: '/profile/new-address',
+            params: {
+              addressId: address.id,
+              initialData: JSON.stringify(address)
+            }
+          })
+        }
+        >
         <View key={index} style={styles.addressCard}>
           <Text style={styles.addressName}>{address.name}</Text>
           <Text style={styles.addressText}>
@@ -46,6 +57,7 @@ export default function AddressesScreen() {
             </View>
           )}
         </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );
