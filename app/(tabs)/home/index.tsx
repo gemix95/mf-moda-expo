@@ -6,18 +6,38 @@ import { api } from '@/services/api';
 import { Collection } from '@/types/homepage';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { useShoppingPreferencesStore } from '@/services/shoppingPreferencesStore';
-import { OneSignal } from 'react-native-onesignal';
+import { storage } from '@/services/storage';
+import { useAuthStore } from '@/services/authStore';
 
 export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
+  const [logged, setLogged] = useState(false);
   const [banner, setBanner] = useState<{ message: string; visible: boolean } | null>(null);
   const [collections, setCollections] = useState<Collection[]>([]);
   const { preferredSector } = useShoppingPreferencesStore();
 
   useEffect(() => {
     loadHomepage();
-    OneSignal.Notifications.requestPermission(true);
+    login()
   }, [preferredSector]);
+
+  const login = async () => {
+    if (logged) { return }
+    setLogged(true)
+    const credentials = await storage.getCredentials();
+    if (credentials.email && credentials.password) {
+      try {
+        const response = await api.login(credentials.email, credentials.password);
+        useAuthStore.getState().login(
+          response.token,
+          response.expiresAt,
+          response.customerInfo
+        );
+      } catch (error) {
+        await storage.clearCredentials();
+      }
+    }
+  }
 
   const loadHomepage = async () => {
     try {

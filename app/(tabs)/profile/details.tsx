@@ -3,9 +3,9 @@ import { useAuthStore } from '@/services/authStore';
 import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import Constants from 'expo-constants';
+import { storage } from '@/services/storage';
 
 export default function CustomerProfileScreen() {
-  const customerInfo = useAuthStore((state) => state.customerInfo);
   const logout = useAuthStore((state) => state.logout);
 
   const menuItems = [
@@ -15,8 +15,9 @@ export default function CustomerProfileScreen() {
     { icon: 'card-giftcard', title: 'Programma fedeltà', route: '' },
   ];
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     logout();
+    await storage.clearCredentials();
     router.back();
   };
 

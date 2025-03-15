@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { api } from '@/services/api';
 import { useAuthStore } from '@/services/authStore';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { storage } from '@/services/storage';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('enyons@mailnesia.com');
@@ -22,6 +23,7 @@ export default function LoginScreen() {
       setIsLoading(true);
       const response = await api.login(email, password);
       
+      await storage.setCredentials(email, password);
       login(
         response.token,
         response.expiresAt,
