@@ -3,12 +3,14 @@ import { useRef, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text } from 'react-native';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function CheckoutPage() {
   const { url } = useLocalSearchParams();
   const router = useRouter();
   const webViewRef = useRef<WebView>(null);
   const [showCloseButton, setShowCloseButton] = useState(false);
+  const { translations } = useLanguageStore();
 
   if (!url) {
     return null;
@@ -20,17 +22,17 @@ export default function CheckoutPage() {
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-        <Text style={styles.headerTitle}>Checkout</Text>
-            {showCloseButton && (
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => router.replace('/(tabs)/home')}
-              >
-                <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
-            )}
-        </View>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>{translations.checkout.title}</Text>
+        {showCloseButton && (
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => router.replace('/(tabs)/home')}
+          >
+            <Text style={styles.closeButtonText}>{translations.common.close}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
       <WebView
         ref={webViewRef}
         source={{ uri: decodeURIComponent(url as string) }}

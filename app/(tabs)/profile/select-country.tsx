@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCountryStore } from '@/services/countryStore';
@@ -7,21 +7,18 @@ import { Country } from '@/types/country';
 import { api } from '@/services/api';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function SelectCountryScreen() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
-  const { setSelectedCountry } = useCountryStore();
+  const { setSelectedCountry, selectedCountry } = useCountryStore();
+  const { translations, language } = useLanguageStore();
 
   const handleSelectCountry = async (country: Country) => {
     try {
-      // Save to global state
       setSelectedCountry(country);
-      
-      // Save to persistent storage
       await AsyncStorage.setItem('selectedCountry', JSON.stringify(country));
-      
-      // Navigate back
       router.back();
     } catch (error) {
       console.error('Failed to save country:', error);
@@ -30,26 +27,23 @@ export default function SelectCountryScreen() {
 
   useEffect(() => {
     const fetchCountries = async () => {
-        try {
-            setLoading(true);
-            const response = await api.fetchCountries();
-            // Sort countries alphabetically by name
-            const sortedCountries = response.sort((a, b) => a.name.localeCompare(b.name));
-            setCountries(sortedCountries);
-        } catch (error) {
-          console.error('Failed to fetch orders:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
+      try {
+        setLoading(true);
+        const response = await api.fetchCountries();
+        const sortedCountries = response.sort((a, b) => 
+          a.name.localeCompare(b.name, language)
+        );
+        setCountries(sortedCountries);
+      } catch (error) {
+        console.error('Failed to fetch countries:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchCountries();
-  }, []);
+    fetchCountries();
+  }, [language]);
 
-  // Add selected country state
-  const { selectedCountry } = useCountryStore();
-
-  // Update the FlatList render item
   if (loading) {
     return <LoadingScreen />;
   }
@@ -57,10 +51,10 @@ export default function SelectCountryScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.subHeaderText}>
-        Prezzo e disponibilità possono variare in base al tuo paese/regione
+        {translations.country.priceAvailabilityNote}
       </Text>
       
-      <Text style={styles.sectionHeader}>Tutti i paesi</Text>
+      <Text style={styles.sectionHeader}>{translations.country.allCountries}</Text>
       
       <FlatList
         data={countries}

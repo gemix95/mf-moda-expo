@@ -1,20 +1,21 @@
 import { Stack } from 'expo-router';
-import { Image } from 'react-native';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function SearchLayout() {
+  const { translations } = useLanguageStore();
+  
   return (
     <Stack>
       <Stack.Screen name="index" options={{ 
-        headerShown: true,  
-        headerTitle: 'Search',
+        headerShown: true,
+        headerTitle: translations.search.title,
         headerTitleAlign: 'center',
-        }}
-        />
+      }}/>
       <Stack.Screen 
         name="sales" 
         options={({ route }) => ({ 
-          title: `${(route.params as { sector?: string })?.sector || ''} Sales`,
-          headerBackTitle: 'Back',
+          title: `${(route.params as { sector?: string })?.sector || ''} ${translations.search.sales}`,
+          headerBackTitle: translations.common.back,
           presentation: 'card'
         })} 
       />

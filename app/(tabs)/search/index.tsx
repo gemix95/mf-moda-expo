@@ -8,6 +8,7 @@ import { LoadingScreen } from '@/components/LoadingScreen';
 import { NewArrivalsBanner } from '@/components/NewArrivalsBanner';
 import { useCountryStore } from '@/services/countryStore';
 import { SearchProducts } from '@/components/SearchProducts';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function SearchScreen() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -15,8 +16,9 @@ export default function SearchScreen() {
   const [selectedSector, setSelectedSector] = useState('Uomo');
   const [searchText, setSearchText] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
-  const selectedCountry = useCountryStore()
+  const selectedCountry = useCountryStore();
   const [isSearching, setIsSearching] = useState(false);
+  const { translations } = useLanguageStore();
   const currentSectorData = categories.find(item => item.sector === selectedSector);
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function SearchScreen() {
         <MaterialIcons name="search" size={24} color="#999" style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
-          placeholder="Search"
+          placeholder={translations.search.placeholder}
           value={searchText}
           onChangeText={handleSearchChange}
         />
@@ -67,7 +69,7 @@ export default function SearchScreen() {
               setIsSearching(false);
             }}
           >
-            <Text style={styles.cancelButton}>Cancel</Text>
+            <Text style={styles.cancelButton}>{translations.common.cancel}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -102,7 +104,7 @@ export default function SearchScreen() {
                     });
                   }}
                 >
-                  <Text style={[styles.categoryTitle, styles.salesTitle]}>Sales</Text>
+                  <Text style={[styles.categoryTitle, styles.salesTitle]}>{translations.search.sales}</Text>
                   <MaterialIcons name="chevron-right" size={24} color="#468866" />
                 </TouchableOpacity>
               </View>

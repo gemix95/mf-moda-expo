@@ -7,6 +7,7 @@ import { api } from '@/services/api';
 import { useAuthStore } from '@/services/authStore';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { storage } from '@/services/storage';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('enyons@mailnesia.com');
@@ -14,6 +15,7 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { translations } = useLanguageStore();
 
   const login = useAuthStore((state) => state.login);
 
@@ -52,13 +54,13 @@ export default function LoginScreen() {
       </View>
 
       <View style={styles.form}>
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>{translations.auth.login}</Text>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>{translations.auth.email}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Email"
+            placeholder={translations.auth.email}
             placeholderTextColor="#999"
             value={email}
             onChangeText={setEmail}
@@ -68,11 +70,11 @@ export default function LoginScreen() {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Password</Text>
+          <Text style={styles.label}>{translations.auth.password}</Text>
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
-              placeholder="Password"
+              placeholder={translations.auth.password}
               placeholderTextColor="#999"
               value={password}
               onChangeText={setPassword}
@@ -89,27 +91,24 @@ export default function LoginScreen() {
         </View>
 
         <TouchableOpacity style={styles.forgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          <Text style={styles.forgotPasswordText}>{translations.auth.forgotPassword}</Text>
         </TouchableOpacity>
 
         {error && <Text style={styles.error}>{error}</Text>}
 
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>Login</Text>
+          <Text style={styles.loginButtonText}>{translations.auth.login}</Text>
         </TouchableOpacity>
 
         <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>
-            Register to Michele Franzese Moda and get the full personalize{'\n'}
-            Shopping Experience at your hand!
-          </Text>
-          <Text style={styles.newCustomer}>New Customer?</Text>
+          <Text style={styles.signupText}>{translations.auth.registerPrompt}</Text>
+          <Text style={styles.newCustomer}>{translations.auth.newCustomer}</Text>
           <TouchableOpacity 
-                style={styles.signupButton}
-                onPress={() => router.push('../signup')}
-              >
-                <Text style={styles.signupButtonText}>Sign up</Text>
-              </TouchableOpacity>
+            style={styles.signupButton}
+            onPress={() => router.push('../signup')}
+          >
+            <Text style={styles.signupButtonText}>{translations.auth.signup}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ImageBackground>

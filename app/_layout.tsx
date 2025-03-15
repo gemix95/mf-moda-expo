@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import React from 'react';
 import { useCountryStore } from '@/services/countryStore';
+import { useLanguageStore } from '@/services/languageStore';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -16,6 +17,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       useCountryStore.getState().initializeCountry();
+      useLanguageStore.getState().initialize();
       SplashScreen.hideAsync();
     }
   }, [loaded]);

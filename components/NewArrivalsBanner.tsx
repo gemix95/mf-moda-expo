@@ -1,6 +1,7 @@
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { router } from 'expo-router';
+import { useLanguageStore } from '@/services/languageStore';
 
 interface NewArrivalsBannerProps {
   sector: string;
@@ -19,11 +20,13 @@ const getCollectionId = (sector: string): number => {
     case 'Casa':
       return 611725214027;
     default:
-      return 611591258443; // Default to Donna collection
+      return 611591258443;
   }
 };
 
 export function NewArrivalsBanner({ sector }: NewArrivalsBannerProps) {
+  const { translations } = useLanguageStore();
+
   return (
     <TouchableOpacity 
       style={styles.container}
@@ -34,13 +37,13 @@ export function NewArrivalsBanner({ sector }: NewArrivalsBannerProps) {
           subCategory: null,
           brand: null,
           collectionId: getCollectionId(sector),
-          title: `New Arrivals ${sector}`
+          title: `${translations.newArrivals.title} ${sector}`
         }
       })}
     >
-      <Text style={styles.title}>New Arrivals</Text>
-      <Text style={styles.subtitle}>Ogni giorno più di 150 nuovi prodotti arrivano in boutique</Text>
-      <Text style={styles.link}>Scopri</Text>
+      <Text style={styles.title}>{translations.newArrivals.title}</Text>
+      <Text style={styles.subtitle}>{translations.newArrivals.subtitle}</Text>
+      <Text style={styles.link}>{translations.newArrivals.discover}</Text>
     </TouchableOpacity>
   );
 }

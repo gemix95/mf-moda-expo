@@ -8,13 +8,15 @@ import { LoadingScreen } from '@/components/LoadingScreen';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '@/services/authStore';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function CartScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [cartData, setCartData] = useState<CartAvailabilityResponse['data'] | null>(null);
   const { items, removeItem } = useCartStore();
-  const { isAuthenticated, customerInfo, token } = useAuthStore.getState();
+  const { customerInfo, token } = useAuthStore.getState();
+  const { translations } = useLanguageStore();
 
   // Add useFocusEffect to call API when screen is focused
   useFocusEffect(
@@ -29,9 +31,9 @@ export default function CartScreen() {
     
     if (hasSoldOutItems) {
       Alert.alert(
-        'Prodotti non disponibili',
-        'Rimuovi i prodotti non disponibili dal carrello prima di procedere al checkout',
-        [{ text: 'OK' }]
+        translations.cart.soldOutAlert,
+        translations.cart.soldOutMessage,
+        [{ text: translations.common.ok }]
       );
       return;
     }
@@ -50,7 +52,7 @@ export default function CartScreen() {
       });
       router.push(`/checkout?url=${encodeURIComponent(response.checkoutUrl)}`);
     } catch (error) {
-      Alert.alert('Error', 'Failed to create checkout');
+      Alert.alert(translations.cart.errorTitle, translations.cart.checkoutError);
       console.log(error);
     } finally {
       setLoading(false);
@@ -108,29 +110,30 @@ export default function CartScreen() {
             <View style={styles.itemDetails}>
               <Text style={styles.brandName}>{item.title}</Text>
               <Text style={styles.itemDescription}>{item.description}</Text>
-              <Text style={styles.sizeText}>Taglia: {item.size}</Text>
-              <Text style={styles.sizeText}>Qty: {item.quantitySelected}</Text>
-              <View style={styles.priceContainer}>
-                {item.originalPrice && (
-                  <Text style={styles.originalPrice}>
-                    {item.currency} {item.originalPrice.toFixed(2)}
-                  </Text>
-                )}
-                <Text style={styles.price}>
-                  {item.currency} {item.price.toFixed(2)}
+              <Text style={styles.sizeText}>{translations.cart.size}: {item.size}</Text>
+              <Text style={styles.sizeText}>{translations.cart.quantity}: {item.quantitySelected}</Text>
+              
+              {item.quantityAvailable === 0 && (
+                <Text style={styles.soldOutBadge}>{translations.cart.soldOut}</Text>
+              )}
+              
+              {/* Update footer section */}
+              <View style={styles.totalContainer}>
+                <Text style={styles.totalLabel}>{translations.cart.shipping}</Text>
+                <Text style={styles.totalLabel}>{translations.cart.shippingCalc}</Text>
+              </View>
+              <View style={styles.totalContainer}>
+                <Text style={styles.totalLabel}>{translations.cart.subtotal}</Text>
+                <Text style={styles.totalAmount}>
+                  {cartData?.totalCart.currency} {cartData?.totalCart.price.toFixed(2)}
                 </Text>
               </View>
-              {item.coupon && item.coupon.applicable && (
-                <View style={styles.couponContainer}>
-                  <Text style={styles.couponCode}>{item.coupon.code}</Text>
-                  <Text style={styles.couponPrice}>
-                    {item.currency} {item.coupon.price.toFixed(2)}
-                  </Text>
-                </View>
-              )}
-              {item.quantityAvailable === 0 && (
-                <Text style={styles.soldOutBadge}>Sold out</Text>
-              )}
+              <TouchableOpacity 
+                style={styles.checkoutButton}
+                onPress={handleCheckout}
+              >
+                <Text style={styles.checkoutButtonText}>{translations.cart.proceedCheckout}</Text>
+              </TouchableOpacity>
             </View>
             <TouchableOpacity
               style={styles.removeButton}

@@ -8,16 +8,18 @@ import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 // Import the raw store instead of the hook
 import { useCountryStore } from './countryStore';
+import { useLanguageStore } from './languageStore';
 
 const BASE_URL = 'https://michelefranzese.moda';
 
 // Function to get headers with country code
 const getHeaders = () => {
-    const state = useCountryStore.getState();
-    const countryCode = state.selectedCountry?.isoCode;
+    const countryState = useCountryStore.getState();
+    const languageState = useLanguageStore.getState();
+    const countryCode = countryState.selectedCountry?.isoCode;
     
     let headers = {
-      'language': 'it',
+      'language': languageState.language || 'it',
       'mf-moda-token': 'vtyujbiuqtvu65699baj90',
       'app-version': Constants.expoConfig?.version || '1.0.0',
       'so': `Android ${Platform.Version}`,

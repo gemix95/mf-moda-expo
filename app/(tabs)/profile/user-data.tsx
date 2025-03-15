@@ -1,23 +1,25 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { useAuthStore } from '@/services/authStore';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function UserDataScreen() {
   const customerInfo = useAuthStore((state) => state.customerInfo);
+  const { translations } = useLanguageStore();
 
   return (
     <View style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.label}>Nome</Text>
+        <Text style={styles.label}>{translations.userData.firstName}</Text>
         <Text style={styles.value}>{customerInfo?.displayName?.split(' ')[0] || '-'}</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.label}>Cognome</Text>
+        <Text style={styles.label}>{translations.userData.lastName}</Text>
         <Text style={styles.value}>{customerInfo?.displayName?.split(' ')[1] || '-'}</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.label}>E-mail</Text>
+        <Text style={styles.label}>{translations.auth.email}</Text>
         <Text style={styles.value}>{customerInfo?.email || '-'}</Text>
       </View>
     </View>

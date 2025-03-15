@@ -4,15 +4,17 @@ import { useAuthStore } from '@/services/authStore';
 import { api } from '@/services/api';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { format } from 'date-fns';
-import { it } from 'date-fns/locale';
+import { it, enUS } from 'date-fns/locale';
 import { Order } from '@/types/user';
 import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function OrdersScreen() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const token = useAuthStore((state) => state.token);
+  const { translations, language } = useLanguageStore();
 
   useEffect(() => {
     const fetchOrdersData = async () => {
@@ -27,80 +29,82 @@ export default function OrdersScreen() {
         }
       } catch (error) {
         console.error('Failed to fetch orders:', error);
-        setOrders([]); // Set empty array on error
+        setOrders([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchOrdersData();
-  }, [token]); // Add token dependency
+  }, [token]);
 
   if (loading) {
     return <LoadingScreen />;
   }
 
-  if (orders.length == 0) {
+  if (orders.length === 0) {
     return (
       <View style={styles.emptyContainer}>
         <MaterialIcons name="shopping-bag" size={64} color="#999" />
-        <Text style={styles.emptyText}>Nessun ordine effettuato</Text>
+        <Text style={styles.emptyText}>{translations.orders.noOrders}</Text>
         <Text style={styles.emptySubtext}>
-          I tuoi ordini appariranno qui una volta effettuato l'acquisto
+          {translations.orders.noOrdersDescription}
         </Text>
       </View>
-    )
+    );
   }
 
   return (
     <ScrollView style={styles.container}>
-        <View style={styles.section}>
+      <View style={styles.section}>
         {orders.map((order) => (
-        <TouchableOpacity 
+          <TouchableOpacity 
             key={order.orderNumber} 
             onPress={() => router.push({
               pathname: '/(tabs)/profile/order-details',
               params: { order: JSON.stringify(order) }
             })}
           >
-          <View key={order.orderNumber} style={styles.orderCard}>
-            <View style={styles.itemContainer}>
-              <View style={styles.imageWrapper}>
-                <Image 
-                  source={{ uri: order.items[0]?.imageUrl }} 
-                  style={styles.itemImage} 
-                />
-                {order.items.length > 1 && (
-                  <View style={styles.itemCountBadge}>
-                    <Text style={styles.itemCountText}>+{order.items.length - 1}</Text>
-                  </View>
-                )}
-              </View>
-              <View style={styles.orderDetails}>
-                <Text style={styles.orderDate}>
-                  {format(new Date(order.processedAt), 'dd MMMM yyyy', { locale: it })}
-                </Text>
-                <Text style={styles.orderNumber}>Ordine #{order.orderNumber}</Text>
-                <Text style={styles.totalAmount}>
-                  {new Intl.NumberFormat('it-IT', {
-                    style: 'currency',
-                    currency: order.totalPrice.currencyCode
-                  }).format(Number(order.totalPrice.amount))}
-                </Text>
-                {order.canceledAt && (
-                  <View style={styles.cancelledBadge}>
-                    <Text style={styles.cancelledText}>Reso</Text>
-                  </View>
-                )}
-              </View>
-              <View style={styles.arrowContainer}>
-                <MaterialIcons name="chevron-right" size={24} color="#999" />
+            <View key={order.orderNumber} style={styles.orderCard}>
+              <View style={styles.itemContainer}>
+                <View style={styles.imageWrapper}>
+                  <Image 
+                    source={{ uri: order.items[0]?.imageUrl }} 
+                    style={styles.itemImage} 
+                  />
+                  {order.items.length > 1 && (
+                    <View style={styles.itemCountBadge}>
+                      <Text style={styles.itemCountText}>+{order.items.length - 1}</Text>
+                    </View>
+                  )}
+                </View>
+                <View style={styles.orderDetails}>
+                  <Text style={styles.orderDate}>
+                    {format(new Date(order.processedAt), 'dd MMMM yyyy', { 
+                      locale: language === 'it' ? it : enUS 
+                    })}
+                  </Text>
+                  <Text style={styles.orderNumber}>{translations.orders.orderNumber} #{order.orderNumber}</Text>
+                  <Text style={styles.totalAmount}>
+                    {new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
+                      style: 'currency',
+                      currency: order.totalPrice.currencyCode
+                    }).format(Number(order.totalPrice.amount))}
+                  </Text>
+                  {order.canceledAt && (
+                    <View style={styles.cancelledBadge}>
+                      <Text style={styles.cancelledText}>{translations.orders.returned}</Text>
+                    </View>
+                  )}
+                </View>
+                <View style={styles.arrowContainer}>
+                  <MaterialIcons name="chevron-right" size={24} color="#999" />
+                </View>
               </View>
             </View>
-          </View>
           </TouchableOpacity>
         ))}
-        </View>
+      </View>
     </ScrollView>
   );
 }

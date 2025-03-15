@@ -2,20 +2,24 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { format } from 'date-fns';
-import { it } from 'date-fns/locale';
+import { it, enUS } from 'date-fns/locale';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function OrderDetailsScreen() {
   const { order: orderParam } = useLocalSearchParams();
   const order = JSON.parse(orderParam as string);
+  const { translations, language } = useLanguageStore();
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Dettagli ordine</Text>
+      <Text style={styles.title}>{translations.orders.details}</Text>
       
       <View style={styles.section}>
-        <Text style={styles.sectionLabel}>Ordinato il:</Text>
+        <Text style={styles.sectionLabel}>{translations.orders.orderedOn}:</Text>
         <Text style={styles.sectionText}>
-          {format(new Date(order.processedAt), 'dd MMMM yyyy', { locale: it })}
+          {format(new Date(order.processedAt), 'dd MMMM yyyy', { 
+            locale: language === 'it' ? it : enUS // Change this line
+          })}
         </Text>
       </View>
 
@@ -24,7 +28,7 @@ export default function OrderDetailsScreen() {
           <>  
             <View style={styles.addressHeader}>
               <View style={styles.badge}>
-                <Text style={styles.badgeText}>Indirizzo di spedizione</Text>
+                <Text style={styles.badgeText}>{translations.orders.shippingAddress}</Text>
               </View>
             </View>
             <Text style={styles.addressName}>{order.shippingAddress.name}</Text>
@@ -40,11 +44,11 @@ export default function OrderDetailsScreen() {
 
         {order.billingAddress && (
           <>  
-          <View style={styles.addressHeader}>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>Indirizzo di fatturazione</Text>
-          </View>
-          </View>
+            <View style={styles.addressHeader}>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{translations.orders.billingAddress}</Text>
+              </View>
+            </View>
             <Text style={styles.addressName}>{order.billingAddress.name}</Text>
             <Text style={styles.addressText}>
               {order.billingAddress.address1}
@@ -58,17 +62,17 @@ export default function OrderDetailsScreen() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Prodotti</Text>
+        <Text style={styles.sectionTitle}>{translations.orders.products}</Text>
         {order.items.map((item: any, index: number) => (
           <View key={index} style={styles.productItem}>
             <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
             <View style={styles.productDetails}>
               <Text style={styles.productVendor}>{item.vendor}</Text>
               <Text style={styles.productTitle}>{item.title}</Text>
-              {item.size && <Text style={styles.productSize}>Taglia: {item.size}</Text>}
-              <Text style={styles.productSize}>Qty: {item.quantity}</Text>
+              {item.size && <Text style={styles.productSize}>{translations.cart.size}: {item.size}</Text>}
+              <Text style={styles.productSize}>{translations.cart.quantity}: {item.quantity}</Text>
               <Text style={styles.productPrice}>
-                {new Intl.NumberFormat('it-IT', {
+                {new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
                   style: 'currency',
                   currency: item.price.currencyCode ?? "EUR"
                 }).format(Number(item.price.originalPrice))}
@@ -79,11 +83,11 @@ export default function OrderDetailsScreen() {
       </View>
 
       <View style={styles.summary}>
-        <Text style={styles.summaryTitle}>Riepilogo</Text>
+        <Text style={styles.summaryTitle}>{translations.orders.summary}</Text>
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>{order.items.length} Prodotti</Text>
+          <Text style={styles.summaryLabel}>{order.items.length} {translations.orders.products}</Text>
           <Text style={styles.summaryValue}>
-            {new Intl.NumberFormat('it-IT', {
+            {new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
               style: 'currency',
               currency: order.totalPrice.currencyCode ?? "EUR"
             }).format(Number(order.subTotalPrice.amount))}
@@ -91,9 +95,9 @@ export default function OrderDetailsScreen() {
         </View>
         {order.totalShippingPrice && (
           <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Spedizione</Text>
+            <Text style={styles.summaryLabel}>{translations.orders.shipping}</Text>
             <Text style={styles.summaryValue}>
-              {new Intl.NumberFormat('it-IT', {
+              {new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
                 style: 'currency',
                 currency: order.totalShippingPrice.currencyCode ?? "EUR"
               }).format(Number(order.totalShippingPrice.amount))}
@@ -106,7 +110,7 @@ export default function OrderDetailsScreen() {
               {order.shippingDiscount.name}
             </Text>
             <Text style={[styles.summaryValue, styles.discountValue]}>
-              -{new Intl.NumberFormat('it-IT', {
+              -{new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
                 style: 'currency',
                 currency: order.shippingDiscount.currencyCode ?? "EUR"
               }).format(Number(order.shippingDiscount.discountAmount))}
@@ -119,7 +123,7 @@ export default function OrderDetailsScreen() {
               {order.discount.name}
             </Text>
             <Text style={[styles.summaryValue, styles.discountValue]}>
-              -{new Intl.NumberFormat('it-IT', {
+              -{new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
                 style: 'currency',
                 currency: order.discount.discountAmount.currencyCode ?? "EUR"
               }).format(Number(order.discount.discountAmount))}
@@ -127,9 +131,9 @@ export default function OrderDetailsScreen() {
           </View>
         )}
         <View style={[styles.summaryRow]}>
-          <Text style={styles.totalLabel}>Totale</Text>
+          <Text style={styles.totalLabel}>{translations.orders.total}</Text>
           <Text style={styles.totalValue}>
-            {new Intl.NumberFormat('it-IT', {
+            {new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
               style: 'currency',
               currency: order.totalPrice.currencyCode ?? "EUR"
             }).format(Number(order.totalPrice.amount))}
@@ -138,17 +142,17 @@ export default function OrderDetailsScreen() {
 
         {order.totalRefoundedPrice && 
           <View style={styles.summaryRow}>
-          <Text style={[styles.summaryLabel, styles.discountLabel]}>
-            Rimborsato
-          </Text>
-          <Text style={[styles.summaryValue, styles.discountValue]}>
-            -{new Intl.NumberFormat('it-IT', {
-              style: 'currency',
-              currency: order.totalRefoundedPrice.currencyCode ?? "EUR"
-            }).format(Number(order.totalRefoundedPrice.amount))}
-          </Text>
+            <Text style={[styles.summaryLabel, styles.discountLabel]}>
+              {translations.orders.refunded}
+            </Text>
+            <Text style={[styles.summaryValue, styles.discountValue]}>
+              -{new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
+                style: 'currency',
+                currency: order.totalRefoundedPrice.currencyCode ?? "EUR"
+              }).format(Number(order.totalRefoundedPrice.amount))}
+            </Text>
           </View>
-          }
+        }
       </View>
     </ScrollView>
   );

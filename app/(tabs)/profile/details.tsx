@@ -4,15 +4,17 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import Constants from 'expo-constants';
 import { storage } from '@/services/storage';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function CustomerProfileScreen() {
   const logout = useAuthStore((state) => state.logout);
+  const { translations } = useLanguageStore();
 
   const menuItems = [
-    { icon: 'person-outline', title: 'I tuoi dati', route: '/(tabs)/profile/user-data' },
-    { icon: 'local-shipping', title: 'I tuoi ordini', route: '/(tabs)/profile/orders' },
-    { icon: 'location-on', title: 'I tuoi indirizzi', route: '/(tabs)/profile/addresses' },
-    { icon: 'card-giftcard', title: 'Programma fedeltà', route: '' },
+    { icon: 'person-outline', title: translations.profile.menu.userData, route: '/(tabs)/profile/user-data' },
+    { icon: 'local-shipping', title: translations.profile.menu.orders, route: '/(tabs)/profile/orders' },
+    { icon: 'location-on', title: translations.profile.menu.addresses, route: '/(tabs)/profile/addresses' },
+    { icon: 'card-giftcard', title: translations.profile.menu.loyalty, route: '' },
   ];
 
   const handleLogout = async () => {
@@ -23,24 +25,24 @@ export default function CustomerProfileScreen() {
 
   return (
     <ScrollView style={styles.container}>
-    <View style={styles.section}>
-      {menuItems.map((item, index) => (
-        <TouchableOpacity 
-         key={index}
-         style={styles.menuItem}
-         onPress={() => router.push(item.route as any)}
-        >
-          <View style={styles.leftContent}>
-            <MaterialIcons name={item.icon as keyof typeof MaterialIcons.glyphMap} size={24} color="#000" />
-            <Text style={styles.menuText}>{item.title}</Text>
-          </View>
-          <MaterialIcons name="chevron-right" size={24} color="#999" />
-        </TouchableOpacity>
-      ))}
-    </View>
+      <View style={styles.section}>
+        {menuItems.map((item, index) => (
+          <TouchableOpacity 
+           key={index}
+           style={styles.menuItem}
+           onPress={() => router.push(item.route as any)}
+          >
+            <View style={styles.leftContent}>
+              <MaterialIcons name={item.icon as keyof typeof MaterialIcons.glyphMap} size={24} color="#000" />
+              <Text style={styles.menuText}>{item.title}</Text>
+            </View>
+            <MaterialIcons name="chevron-right" size={24} color="#999" />
+          </TouchableOpacity>
+        ))}
+      </View>
       <View style={styles.footer}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Logout</Text>
+          <Text style={styles.logoutText}>{translations.auth.logout}</Text>
         </TouchableOpacity>
 
         <Text style={styles.appVersion}>

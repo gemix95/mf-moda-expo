@@ -5,10 +5,12 @@ import { router } from 'expo-router';
 import { useWishlistStore } from '@/services/wishlistStore';
 import { useProductStore } from '@/types/productStore';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function WishlistScreen() {
   const { products, removeItem, loadWishlist } = useWishlistStore();
   const [isLoading, setIsLoading] = useState(false);
+  const { translations, language } = useLanguageStore();
 
   useEffect(() => {
     const loadData = async () => {
@@ -33,9 +35,9 @@ export default function WishlistScreen() {
     return (
       <View style={styles.emptyContainer}>
         <MaterialIcons name="favorite-border" size={64} color="#999" />
-        <Text style={styles.emptyText}>La tua lista dei desideri è vuota</Text>
+        <Text style={styles.emptyText}>{translations.wishlist.emptyTitle}</Text>
         <Text style={styles.emptySubtext}>
-          Salva i tuoi prodotti preferiti per acquistarli più tardi
+          {translations.wishlist.emptyDescription}
         </Text>
       </View>
     );
@@ -76,15 +78,24 @@ export default function WishlistScreen() {
                 {item.originalPrice ? (
                   <>
                     <Text style={[styles.price, styles.originalPrice]}>
-                      {item.currencyCode} {item.originalPrice.toFixed(2)}
+                      {new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
+                        style: 'currency',
+                        currency: item.currencyCode
+                      }).format(item.originalPrice)}
                     </Text>
                     <Text style={styles.salePrice}>
-                      {item.currencyCode} {item.price.toFixed(2)}
+                      {new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
+                        style: 'currency',
+                        currency: item.currencyCode
+                      }).format(item.price)}
                     </Text>
                   </>
                 ) : (
                   <Text style={styles.price}>
-                    {item.currencyCode} {item.price.toFixed(2)}
+                    {new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
+                      style: 'currency',
+                      currency: item.currencyCode
+                    }).format(item.price)}
                   </Text>
                 )}
               </View>

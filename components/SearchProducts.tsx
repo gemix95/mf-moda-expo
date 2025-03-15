@@ -4,6 +4,7 @@ import { debounce } from 'lodash';
 import { api } from '@/services/api';
 import { CatalogView } from './CatalogView';
 import { Product, ProductsResponse } from '@/types/product';
+import { useLanguageStore } from '@/services/languageStore';
 
 interface SearchProductsProps {
   initialQuery?: string;
@@ -12,10 +13,11 @@ interface SearchProductsProps {
 export function SearchProducts({ initialQuery = '' }: SearchProductsProps) {
   const [loading, setLoading] = useState(true);
   const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const { translations } = useLanguageStore();
 
   useEffect(() => {
     if (initialQuery) {
-        debouncedSearch(initialQuery);
+      debouncedSearch(initialQuery);
     }
   }, [initialQuery]);
 
@@ -51,12 +53,12 @@ export function SearchProducts({ initialQuery = '' }: SearchProductsProps) {
 
       {!loading && searchResults.length === 0 && initialQuery && (
         <View style={styles.noResults}>
-          <Text style={styles.noResultsText}>No products found</Text>
-          <Text style={styles.noResultsSubtext}>Try different keywords</Text>
+          <Text style={styles.noResultsText}>{translations.search.noResults}</Text>
+          <Text style={styles.noResultsSubtext}>{translations.search.tryDifferentKeywords}</Text>
         </View>
       )}
 
-      {!loading &&  searchResults.length > 0 && (
+      {!loading && searchResults.length > 0 && (
         <CatalogView products={searchResults} path="search" />
       )}
     </View>

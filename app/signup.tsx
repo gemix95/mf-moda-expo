@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { api } from '@/services/api';
 import { useAuthStore } from '@/services/authStore';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function SignUpScreen() {
   const [firstName, setFirstName] = useState('');
@@ -13,6 +14,7 @@ export default function SignUpScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const login = useAuthStore((state) => state.login);
+  const { translations } = useLanguageStore();
 
   const handleSignUp = async () => {
     try {
@@ -24,14 +26,13 @@ export default function SignUpScreen() {
         lastName,
       });
       
-      // Login the user with the received data
       login(
         response.token,
         response.expiresAt,
         {
-            ...response.customerInfo,
-            defaultAddress: null,
-            addresses: []
+          ...response.customerInfo,
+          defaultAddress: null,
+          addresses: []
         }
       );
       
@@ -39,9 +40,9 @@ export default function SignUpScreen() {
       router.back();
     } catch (error) {
       Alert.alert(
-        'Error',
-        error instanceof Error ? error.message : 'Signup failed',
-        [{ text: 'OK' }],
+        translations.common.error,
+        error instanceof Error ? error.message : translations.auth.signupError,
+        [{ text: translations.common.ok }],
         { cancelable: false }
       );
     } finally {
@@ -53,7 +54,7 @@ export default function SignUpScreen() {
     <ScrollView style={styles.container}>
       <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
         <MaterialIcons name="arrow-back" size={24} color="#000" />
-        <Text style={styles.backText}>Back</Text>
+        <Text style={styles.backText}>{translations.common.back}</Text>
       </TouchableOpacity>
 
       <View style={styles.logoContainer}>
@@ -62,33 +63,33 @@ export default function SignUpScreen() {
       </View>
 
       <View style={styles.formContainer}>
-        <Text style={styles.title}>Sign up</Text>
+        <Text style={styles.title}>{translations.auth.signup}</Text>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>First Name</Text>
+          <Text style={styles.label}>{translations.userData.firstName}</Text>
           <TextInput
             style={styles.input}
-            placeholder="First Name"
+            placeholder={translations.userData.firstName}
             value={firstName}
             onChangeText={setFirstName}
           />
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Last Name</Text>
+          <Text style={styles.label}>{translations.userData.lastName}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Last Name"
+            placeholder={translations.userData.lastName}
             value={lastName}
             onChangeText={setLastName}
           />
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>{translations.auth.email}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Email"
+            placeholder={translations.auth.email}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -97,11 +98,11 @@ export default function SignUpScreen() {
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Password</Text>
+          <Text style={styles.label}>{translations.auth.password}</Text>
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
-              placeholder="Password"
+              placeholder={translations.auth.password}
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
@@ -118,9 +119,10 @@ export default function SignUpScreen() {
         </View>
 
         <Text style={styles.termsText}>
-          By continuing, you accept Michele Franzese Moda's{' '}
-          <Text style={styles.link}>Terms & Conditions</Text>. To learn more about how Michele Franzese Moda uses and protects your personal data, please read Michele Franzese Moda's{' '}
-          <Text style={styles.link}>Privacy Policy</Text>.
+          {translations.auth.termsText}{' '}
+          <Text style={styles.link}>{translations.auth.terms}</Text>
+          {translations.auth.privacyText}{' '}
+          <Text style={styles.link}>{translations.auth.privacy}</Text>.
         </Text>
 
         <TouchableOpacity 
@@ -129,7 +131,7 @@ export default function SignUpScreen() {
           disabled={isLoading}
         >
           <Text style={styles.signupButtonText}>
-            {isLoading ? 'Creating account...' : 'Sign up'}
+            {isLoading ? translations.auth.creatingAccount : translations.auth.signup}
           </Text>
         </TouchableOpacity>
       </View>

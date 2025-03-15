@@ -1,110 +1,126 @@
 import { Link, Stack } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useLanguageStore } from '@/services/languageStore';
 
 export default function ProfileLayout() {
+  const { translations } = useLanguageStore();
+
   return (
     <Stack>
       <Stack.Screen name="index" options={{ 
         headerShown: true,
-        headerTitle: 'Profile',
+        headerTitle: translations.profile.menu.profile,
         headerTitleAlign: 'center',
       }}
       />
 
-    <Stack.Screen 
+      <Stack.Screen 
         name="details" 
         options={() => ({ 
-          title: `Il tuo Profilo`,
-          headerBackTitle: 'Back',
+          title: translations.profile.menu.profile,
+          headerBackTitle: translations.common.back,
           presentation: 'card'
         })} 
       />
 
-    <Stack.Screen 
+      <Stack.Screen 
         name="user-data" 
         options={() => ({ 
-          title: `I tuoi Dati`,
-          headerBackTitle: 'Back',
+          title: translations.profile.menu.profile,
+          headerBackTitle: translations.common.back,
           presentation: 'card'
         })} 
       />
 
-    <Stack.Screen 
+      <Stack.Screen 
         name="orders" 
         options={() => ({ 
-          title: `I tuoi Ordini`,
-          headerBackTitle: 'Back',
+          title: translations.profile.menu.orders,
+          headerBackTitle: translations.common.back,
           presentation: 'card'
         })} 
       />
 
-    <Stack.Screen 
+      <Stack.Screen 
         name="order-details" 
         options={({ route }) => {
           const order = route.params && 'order' in route.params ? JSON.parse(route.params.order as string) : null;
           return {
-            title: order ? `Ordine #${order.orderNumber}` : '',
-            headerBackTitle: 'Back',
+            title: order ? `${translations.profile.menu.order} #${order.orderNumber}` : '',
+            headerBackTitle: translations.common.back,
             presentation: 'card'
           };
         }} 
       />
-    <Stack.Screen 
-      name="addresses" 
-      options={() => ({ 
-        title: 'I tuoi Indirizzi',
-        headerBackTitle: 'Back',
-        presentation: 'card',
-        headerRight: () => (
-          <Link href="/(tabs)/profile/new-address" asChild>
-          <TouchableOpacity style={styles.addButton}>
-            <Text style={styles.addButtonText}>Aggiungi</Text>
-          </TouchableOpacity>
-        </Link>
-        )
-      })} 
-    />
-    <Stack.Screen 
-      name="new-address" 
-      options={({ route }) => ({ 
-        title: route.params && 'addressId' in route.params ? 'Modifica Indirizzo' : 'Nuovo Indirizzo',
-        headerBackTitle: 'Back',
-        presentation: 'card'
-      })} 
-    />
-    
-    <Stack.Screen 
-      name="select-country" 
-      options={() => ({ 
-        title: 'Seleziona Paese',
-        headerBackTitle: 'Back',
-        presentation: 'card'
-      })} 
-    />
 
-    <Stack.Screen 
-      name="shopping-preferences" 
-      options={() => ({ 
-        title: 'Preferenze Shopping',
-        headerBackTitle: 'Back',
-        presentation: 'card'
-      })} 
-    />
+      <Stack.Screen 
+        name="addresses" 
+        options={() => ({ 
+          title: translations.profile.menu.addresses,
+          headerBackTitle: translations.common.back,
+          presentation: 'card',
+          headerRight: () => (
+            <Link href="/(tabs)/profile/new-address" asChild>
+              <TouchableOpacity style={styles.addButton}>
+                <Text style={styles.addButtonText}>{translations.common.add}</Text>
+              </TouchableOpacity>
+            </Link>
+          )
+        })} 
+      />
 
-    <Stack.Screen 
-      name="wishlist" 
-      options={() => ({ 
-        title: 'Wishlist',
-        headerBackTitle: 'Back',
-        presentation: 'card'
-      })} 
-    />
+      <Stack.Screen 
+        name="new-address" 
+        options={({ route }) => ({ 
+          title: route.params && 'addressId' in route.params ? 
+            translations.profile.menu.editAddress : 
+            translations.profile.menu.newAddress,
+          headerBackTitle: translations.common.back,
+          presentation: 'card'
+        })} 
+      />
+      
+      <Stack.Screen 
+        name="select-country" 
+        options={() => ({ 
+          title: translations.profile.menu.selectCountry,
+          headerBackTitle: translations.common.back,
+          presentation: 'card'
+        })} 
+      />
 
-    <Stack.Screen 
+      <Stack.Screen 
+        name="shopping-preferences" 
+        options={() => ({ 
+          title: translations.profile.menu.preferences,
+          headerBackTitle: translations.common.back,
+          presentation: 'card'
+        })} 
+      />
+
+      <Stack.Screen 
+        name="wishlist" 
+        options={() => ({ 
+          title: translations.profile.menu.wishlist,
+          headerBackTitle: translations.common.back,
+          presentation: 'card'
+        })} 
+      />
+
+      <Stack.Screen 
         name="product" 
         options={({ route }) => ({ 
           title: `${(route.params as { brand?: string })?.brand || ''}`,
-          headerBackTitle: 'Back',
+          headerBackTitle: translations.common.back,
+          presentation: 'card'
+        })} 
+      />
+
+      <Stack.Screen 
+        name="notifications" 
+        options={() => ({ 
+          title: translations.profile.menu.notifications,
+          headerBackTitle: translations.common.back,
           presentation: 'card'
         })} 
       />
