@@ -66,7 +66,7 @@ export const it = {
       newAddress: 'Nuovo Indirizzo',
       selectCountry: 'Seleziona Paese',
       userData: 'I tuoi dati',
-      loyalty: 'Programma fedeltà',
+      loyalty: 'Programma Fedeltà',
     },
     customerService: {
       title: 'Servizio Clienti',
@@ -90,7 +90,11 @@ export const it = {
     language: {
       italian: 'Italiano',
       english: 'Inglese',
-    }
+    },
+    userData: {
+      firstName: 'Nome',
+      lastName: 'Cognome'
+    },
   },
   search: {
     title: 'Cerca',
@@ -122,16 +126,9 @@ export const it = {
     priceAvailabilityNote: 'Prezzo e disponibilità possono variare in base al tuo paese/regione',
     allCountries: 'Tutti i paesi'
   },
-  userData: {
-    firstName: 'Nome',
-    lastName: 'Cognome'
-  },
   wishlist: {
     emptyTitle: 'La tua lista dei desideri è vuota',
     emptyDescription: 'Salva i tuoi prodotti preferiti per acquistarli più tardi'
-  },
-  checkout: {
-    title: 'Checkout'
   },
   newArrivals: {
     title: 'New Arrivals',
@@ -144,5 +141,17 @@ export const it = {
       search: 'Cerca',
       cart: 'Carrello',
       profile: 'Profilo'
+  },
+  loyalty: {
+      pointsAccumulated: 'I tuoi punti accumulati',
+      yourCoupons: 'I Tuoi Coupon',
+      redeemPoints: 'Riscatta i tuoi punti per sconti esclusivi',
+      discount: 'Sconto',
+      expires: 'Scade il',
+      noCoupons: 'Nessun coupon disponibile. Continua a fare acquisti per guadagnare punti!',
+      howItWorks: 'Come Funziona',
+      errorLoading: 'Impossibile caricare le informazioni del programma fedeltà',
+      codeCopied: 'Codice Copiato',
+      codeCopiedMessage: 'Codice sconto copiato negli appunti'
   }
 }

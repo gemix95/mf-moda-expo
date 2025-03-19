@@ -14,7 +14,7 @@ export default function CustomerProfileScreen() {
     { icon: 'person-outline', title: translations.profile.menu.userData, route: '/(tabs)/profile/user-data' },
     { icon: 'local-shipping', title: translations.profile.menu.orders, route: '/(tabs)/profile/orders' },
     { icon: 'location-on', title: translations.profile.menu.addresses, route: '/(tabs)/profile/addresses' },
-    { icon: 'card-giftcard', title: translations.profile.menu.loyalty, route: '' },
+    { icon: 'card-giftcard', title: translations.profile.menu.loyalty, route: '/(tabs)/profile/loyalty' },
   ];
 
   const handleLogout = async () => {

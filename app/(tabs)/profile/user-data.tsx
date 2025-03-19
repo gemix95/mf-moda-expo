@@ -9,12 +9,12 @@ export default function UserDataScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.label}>{translations.userData.firstName}</Text>
+        <Text style={styles.label}>{translations.profile.userData.firstName}</Text>
         <Text style={styles.value}>{customerInfo?.displayName?.split(' ')[0] || '-'}</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.label}>{translations.userData.lastName}</Text>
+        <Text style={styles.label}>{translations.profile.userData.lastName}</Text>
         <Text style={styles.value}>{customerInfo?.displayName?.split(' ')[1] || '-'}</Text>
       </View>
 

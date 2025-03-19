@@ -16,7 +16,7 @@ export default function ProfileScreen() {
     ? `${selectedCountry.name} (${selectedCountry.currency.isoCode} ${selectedCountry.currency.symbol})`
     : 'Italia (EUR €)';
 
-  const { translations } = useLanguageStore();
+  const { translations, language } = useLanguageStore();
   
   // Update handleMenuPress
   const handleMenuPress = (item: any) => {
@@ -60,7 +60,13 @@ export default function ProfileScreen() {
     {
       title: translations.profile.menu.language,
       items: [
-        { type: "language", icon: 'language', title: translations.profile.language.italian, subtitle: translations.profile.menu.language, external: false },
+        { 
+          type: "language", 
+          icon: 'language', 
+          title: language === 'it' ? translations.profile.language.italian : translations.profile.language.english, 
+          subtitle: translations.profile.menu.language, 
+          external: false 
+        },
         { type: "country", icon: 'outlined-flag', title: countryDisplayText, subtitle: translations.profile.menu.region, external: false },
       ]
     },

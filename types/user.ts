@@ -77,3 +77,28 @@ export interface LoginResponse {
     firstName: string;
     lastName: string;
   }
+
+  export interface LoyaltyInfo {
+    accessToken: string;
+    info: {
+      firstName: string;
+      lastName: string;
+      pointsBalance: number;
+      customerIdentifier: number;
+    };
+    activeRewards: ActiveRewards[];
+    rules: Rule[];
+  }
+
+  export interface ActiveRewards {
+    id: number;
+    discountValue: number;
+    discountCode: string;
+    expiration: string;
+    title: string;
+  }
+
+  export interface Rule {
+    title: string;
+    description: string;
+  }

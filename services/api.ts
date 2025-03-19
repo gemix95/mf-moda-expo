@@ -3,7 +3,7 @@ import { Config } from '@/types/config';
 import { Country } from '@/types/country';
 import { HomepageResponse } from '@/types/homepage';
 import { BrandsResponse, CategoriesResponse, GetProductsParams, Product, ProductsResponse } from '@/types/product';
-import { LoginResponse, OrderResponse, SignupRequest, SignupResponse } from '@/types/user';
+import { LoginResponse, LoyaltyInfo, OrderResponse, SignupRequest, SignupResponse } from '@/types/user';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 // Import the raw store instead of the hook
@@ -357,6 +357,26 @@ export const api = {
     }
   
     return data;
+  },
+
+  async getLoyaltyInfo(email: string): Promise<LoyaltyInfo> {
+    const response = await fetch(`${BASE_URL}/api/v1/user/loyalty/info`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to fetch loyalty info');
+    }
+
+    console.log(data)
+    return data.data;
   },
 
   async forgotPassword(email: any) {

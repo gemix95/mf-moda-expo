@@ -124,6 +124,16 @@ export default function ProfileLayout() {
           presentation: 'card'
         })} 
       />
+
+      <Stack.Screen 
+        name="loyalty" 
+        options={() => ({ 
+          title: translations.profile.menu.loyalty,
+          headerBackTitle: translations.common.back,
+          presentation: 'card'
+        })} 
+      />
+
     </Stack>
   );
 }

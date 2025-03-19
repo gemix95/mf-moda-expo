@@ -23,7 +23,7 @@ export default function CheckoutPage() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>{translations.checkout.title}</Text>
+        <Text style={styles.headerTitle}>{translations.cart.title}</Text>
         {showCloseButton && (
           <TouchableOpacity
             style={styles.closeButton}

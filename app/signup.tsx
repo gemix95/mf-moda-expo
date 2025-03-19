@@ -66,20 +66,20 @@ export default function SignUpScreen() {
         <Text style={styles.title}>{translations.auth.signup}</Text>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>{translations.userData.firstName}</Text>
+          <Text style={styles.label}>{translations.profile.userData.firstName}</Text>
           <TextInput
             style={styles.input}
-            placeholder={translations.userData.firstName}
+            placeholder={translations.profile.userData.firstName}
             value={firstName}
             onChangeText={setFirstName}
           />
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>{translations.userData.lastName}</Text>
+          <Text style={styles.label}>{translations.profile.userData.lastName}</Text>
           <TextInput
             style={styles.input}
-            placeholder={translations.userData.lastName}
+            placeholder={translations.profile.userData.lastName}
             value={lastName}
             onChangeText={setLastName}
           />

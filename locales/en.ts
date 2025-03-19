@@ -6,12 +6,7 @@ export const en = {
     loading: 'Loading...',
     add: 'Add',
     cancel: 'Cancel',
-    checkout: {
-      title: 'Checkout'
-    },
-    common: {
-      close: 'Close'
-    }
+    close: 'Close'
   },
   auth: {
     login: 'Login',
@@ -147,4 +142,16 @@ export const en = {
     cart: 'Cart',
     profile: 'Profile'
   },
+  loyalty: {
+    pointsAccumulated: 'Your accumulated points',
+    yourCoupons: 'Your Coupons',
+    redeemPoints: 'Redeem your points for exclusive discounts',
+    discount: 'Discount',
+    expires: 'Expires',
+    noCoupons: 'No coupons available yet. Keep shopping to earn points!',
+    howItWorks: 'How it works',
+    errorLoading: 'Failed to load loyalty information',
+    codeCopied: 'Code Copied',
+    codeCopiedMessage: 'Discount code copied to clipboard'
+  }
 }
