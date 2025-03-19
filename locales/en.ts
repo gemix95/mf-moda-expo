@@ -170,5 +170,9 @@ export const en = {
     errorRedeeming: 'Unable to redeem points. Please try again later.',
     insufficientBalance: 'Your balance is not sufficient to redeem a loyalty reward',
     keepShopping: 'Keep shopping to earn more points!',
-  }
+  },
+  maintenance: {
+    title: 'Maintenance in Progress',
+    description: 'We are performing some updates. We will be back online soon.',
+  },
 }

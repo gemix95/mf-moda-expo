@@ -171,4 +171,8 @@ export const it = {
     insufficientBalance: 'Il tuo saldo non è sufficiente per riscattare un premio fedeltà',
     keepShopping: 'Continua ad acquistare per accumulare punti!',
     },
+    maintenance: {
+      title: 'Manutenzione in corso',
+      description: 'Stiamo effettuando alcuni aggiornamenti. Torneremo presto online.',
+    },
 }
