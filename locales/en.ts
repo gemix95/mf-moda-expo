@@ -28,7 +28,14 @@ export const en = {
     termsText: 'By continuing, you accept Michele Franzese Moda\'s',
     terms: 'Terms & Conditions',
     privacyText: '. To learn more about how Michele Franzese Moda uses and protects your personal data, please read Michele Franzese Moda\'s',
-    privacy: 'Privacy Policy'
+    privacy: 'Privacy Policy',
+    resetPassword: 'Reset Password',
+    resetPasswordDescription: 'Enter your email address and we`ll send you instructions to reset your password.',
+    emailRequired: 'Please enter your email address',
+    sendResetLink: 'Send Reset Link',
+    resetPasswordSuccess: 'Password reset link sent successfully.',
+    resetPasswordError: 'Failed to send reset link. Please try again.',
+    resetPasswordLimit: 'Password reset limit exceeded. Please try again later.'
   },
   cart: {
     title: 'Cart',
@@ -132,5 +139,12 @@ export const en = {
     title: 'New Arrivals',
     subtitle: 'More than 150 new products arrive in boutique every day',
     discover: 'Discover'
-  }
-};
+  },
+  tabs: {
+    home: 'Home',
+    brands: 'Brands',
+    search: 'Search',
+    cart: 'Cart',
+    profile: 'Profile'
+  },
+}

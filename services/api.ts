@@ -358,4 +358,23 @@ export const api = {
   
     return data;
   },
+
+  async forgotPassword(email: any) {
+    const response = await fetch(`${BASE_URL}/api/v1/user/password`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(email),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw error;
+    }
+
+    const data = await response.json();
+    return data;
+  },
 };

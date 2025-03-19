@@ -23,7 +23,14 @@ export const it = {
     termsText: 'Continuando, accetti i',
     terms: 'Termini e Condizioni',
     privacyText: ' di Michele Franzese Moda. Per saperne di più su come Michele Franzese Moda utilizza e protegge i tuoi dati personali, leggi la',
-    privacy: 'Privacy Policy'
+    privacy: 'Privacy Policy',
+    resetPassword: 'Reimposta Password',
+    resetPasswordDescription: 'Inserisci il tuo indirizzo email e ti invieremo le istruzioni per reimpostare la password.',
+    emailRequired: 'Inserisci il tuo indirizzo email',
+    sendResetLink: 'Invia Link',
+    resetPasswordSuccess: 'Link per reimpostare la password inviato con successo.',
+    resetPasswordError: 'Impossibile inviare il link. Riprova.',
+    resetPasswordLimit: 'Limite reimpostazione password superato. Riprova più tardi.'
   },
   cart: {
     title: 'Carrello',
@@ -130,5 +137,12 @@ export const it = {
     title: 'New Arrivals',
     subtitle: 'Ogni giorno più di 150 nuovi prodotti arrivano in boutique',
     discover: 'Scopri'
+  },
+    tabs: {
+      home: 'Home',
+      brands: 'Brand',
+      search: 'Cerca',
+      cart: 'Carrello',
+      profile: 'Profilo'
   }
 }
