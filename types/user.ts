@@ -102,3 +102,23 @@ export interface LoginResponse {
     title: string;
     description: string;
   }
+
+  export interface LoyaltyActivity {
+    date: string;
+    activity: string;
+    points: number;
+  }
+
+  export interface LoyaltyActivityResponse {
+    loyaltyActivities: LoyaltyActivity[];
+  }
+
+  export interface SpendingRule {
+    id: number;
+    title: string;
+    points: number;
+  }
+
+  export interface SpendingRulesResponse {
+    spendingRules: SpendingRule[];
+  }

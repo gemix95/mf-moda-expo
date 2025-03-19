@@ -134,6 +134,23 @@ export default function ProfileLayout() {
         })} 
       />
 
+      <Stack.Screen 
+        name="loyalty-history" 
+        options={() => ({ 
+          title: translations.loyalty.history,
+          headerBackTitle: translations.common.back,
+          presentation: 'card'
+        })} 
+      />
+
+      <Stack.Screen 
+        name="redeem-points" 
+        options={() => ({ 
+          title: translations.loyalty.redeemPoints,
+          headerBackTitle: translations.common.back,
+          presentation: 'card'
+        })} 
+      />
     </Stack>
   );
 }

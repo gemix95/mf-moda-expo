@@ -62,16 +62,41 @@ export default function LoyaltyScreen() {
   return (
     <ScrollView style={styles.container}>      
       <View style={styles.pointsSection}>
-        <Text style={styles.pointsLabel}>{translations.loyalty.pointsAccumulated}</Text>
-        <Text style={styles.points}>
-          {Math.floor(loyaltyData?.info.pointsBalance || 0)}
-        </Text>
-        <Text style={styles.pointsLabel}>Punti MF</Text>
+        <View style={styles.pointsHeader}>
+          <View style={styles.pointsInfo}>
+            <Text style={styles.pointsLabel}>{translations.loyalty.pointsAccumulated}</Text>
+            <Text style={styles.points}>
+              {Math.floor(loyaltyData?.info.pointsBalance || 0)}
+            </Text>
+            <Text style={styles.pointsLabel}>Punti MF</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.redeemButton}
+            onPress={() => router.push({
+              pathname: '/profile/redeem-points',
+              params: { 
+                accessToken: loyaltyData?.accessToken,
+                customerIdentifier: loyaltyData?.info.customerIdentifier,
+              }
+            })}
+          >
+            <Text style={styles.redeemButtonText}>{translations.loyalty.redeemPoints}</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity 
+          style={styles.historyButton}
+          onPress={() => router.push({
+            pathname: '/profile/loyalty-history',
+            params: { accessToken: loyaltyData?.accessToken }
+          })}
+        >
+          <Text style={styles.historyButtonText}>{translations.loyalty.viewHistory}</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.rewardsSection}>
         <Text style={styles.sectionTitle}>{translations.loyalty.yourCoupons}</Text>
-        <Text style={styles.subtitle}>{translations.loyalty.redeemPoints}</Text>
+        <Text style={styles.subtitle}>{translations.loyalty.redeemPointsInfo}</Text>
 
         {loyaltyData?.activeRewards && loyaltyData.activeRewards.length > 0 ? (
           loyaltyData.activeRewards.map((reward) => (
@@ -135,8 +160,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   pointsSection: {
+    padding: 32,
+  },
+  pointsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 32,
+    width: '100%',
+  },
+  pointsInfo: {
+    alignItems: 'flex-start',
   },
   pointsLabel: {
     fontSize: 16,
@@ -227,4 +260,36 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     lineHeight: 20,
   },
+  historyButtonText: {
+    fontWeight: '500',
+    fontSize: 16,
+    color: '#000',
+    textDecorationLine: 'underline', 
+  },
+  pointsActions: {
+      flexDirection: 'row',
+      justifyContent: 'center', // Changed from space-between to center
+      alignItems: 'center', // Added to vertically align buttons
+      width: '100%',
+      paddingHorizontal: 16,
+      marginTop: 16,
+      gap: 32, // Added gap between buttons
+    },
+    historyButton: {
+        marginTop: 16,
+        alignSelf: 'flex-start',
+      },
+      redeemButton: {
+        backgroundColor: '#000',
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 50,
+        paddingHorizontal: 12,
+      },
+    redeemButtonText: {
+      fontSize: 16,
+      color: '#fff',
+      textAlign: 'center',
+    },
 });

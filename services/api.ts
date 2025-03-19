@@ -3,7 +3,7 @@ import { Config } from '@/types/config';
 import { Country } from '@/types/country';
 import { HomepageResponse } from '@/types/homepage';
 import { BrandsResponse, CategoriesResponse, GetProductsParams, Product, ProductsResponse } from '@/types/product';
-import { LoginResponse, LoyaltyInfo, OrderResponse, SignupRequest, SignupResponse } from '@/types/user';
+import { LoginResponse, LoyaltyInfo, OrderResponse, SignupRequest, SignupResponse, SpendingRulesResponse } from '@/types/user';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 // Import the raw store instead of the hook
@@ -375,7 +375,25 @@ export const api = {
       throw new Error(data.message || 'Failed to fetch loyalty info');
     }
 
-    console.log(data)
+    return data.data;
+  },
+
+  async getLoyaltyActivity(email: string, accessToken: string): Promise<any> {
+    const response = await fetch(`${BASE_URL}/api/v1/user/loyalty/activity`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, accessToken }),
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to fetch loyalty activity');
+    }
+
     return data.data;
   },
 
@@ -396,5 +414,46 @@ export const api = {
 
     const data = await response.json();
     return data;
+  },
+  async getSpendingRules(email: string, accessToken: string): Promise<SpendingRulesResponse> {
+      const response = await fetch(`${BASE_URL}/api/v1/user/loyalty/spendingRules`, {
+        method: 'POST',
+        headers: {
+          ...getHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, accessToken }),
+      });
+  
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch spending rules');
+      }
+  
+      return data.data;
+    },
+  
+  async redeemPoints(data: { 
+    accessToken: string;
+    ruleId: number;
+    customerIdentifier: number;
+  }): Promise<{ message: string }> {
+    const response = await fetch(`${BASE_URL}/api/v1/user/loyalty/redeem`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+  
+    const result = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to redeem points');
+    }
+  
+    return result;
   },
 };
