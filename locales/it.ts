@@ -175,4 +175,9 @@ export const it = {
       title: 'Manutenzione in corso',
       description: 'Stiamo effettuando alcuni aggiornamenti. Torneremo presto online.',
     },
+    update: {
+      requiredTitle: 'Aggiornamento Richiesto',
+      requiredDescription: 'È necessaria una nuova versione dell\'app per continuare. Aggiorna all\'ultima versione.',
+      updateNow: 'Aggiorna Ora',
+    },
 }

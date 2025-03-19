@@ -6,6 +6,7 @@ export interface Config {
         update: {
             showUpdateCard: boolean;
             minSupportedVersion: string;
+            minSupportedVersionAndroid?: string
         };
         dynamicLogo: {
             enabled: boolean;

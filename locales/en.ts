@@ -175,4 +175,9 @@ export const en = {
     title: 'Maintenance in Progress',
     description: 'We are performing some updates. We will be back online soon.',
   },
+  update: {
+    requiredTitle: 'Update Required',
+    requiredDescription: 'A new version of the app is required to continue. Please update to the latest version.',
+    updateNow: 'Update Now',
+  },
 }
