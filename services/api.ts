@@ -456,4 +456,24 @@ export const api = {
   
     return result;
   },
+
+  async getNewArrivals({ sector, limit }: { sector: string; limit: number }): Promise<ProductsResponse> {
+    const countryState = useCountryStore.getState();    
+    const countryCode = countryState.selectedCountry?.isoCode;
+
+    const response = await fetch(`${BASE_URL}/api/v1/products/new`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ countryCode, sector, limit }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch new arrivals');
+    }
+
+    return response.json();
+  },
 };
