@@ -4,8 +4,8 @@ export interface Config {
             showCouponField: boolean;
         };
         update: {
-            showUpdateCard: boolean;
-            minSupportedVersion: string;
+            showUpdateCardAndroid?: boolean;
+            lastVersionOnPlayStore: string;
             minSupportedVersionAndroid?: string
         };
         dynamicLogo: {

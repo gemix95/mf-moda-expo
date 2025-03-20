@@ -8,6 +8,7 @@ import { UpdateRequiredPage } from '@/components/UpdateRequiredPage';
 import { OneSignal } from 'react-native-onesignal';
 import { compareVersions } from '@/utils/version';
 import Constants from 'expo-constants';
+import { useConfigStore } from '@/services/configStore';
 
 export default function RootScreen() {
   const [isMaintenanceMode, setIsMaintenanceMode] = useState(false);
@@ -17,9 +18,12 @@ export default function RootScreen() {
     loadConfig();
   }, []);
 
+  const { setConfig } = useConfigStore();
+
   const loadConfig = async () => {
     try {
       const response = await api.getConfig();
+      setConfig(response.data);
       
       if (response.data.maintenance?.androidEnabled) {
         setIsMaintenanceMode(true);

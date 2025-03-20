@@ -12,3 +12,18 @@ export function compareVersions(a: string, b: string): number {
   
   return 0;
 }
+
+export function isVersionLower(current: string, target: string): boolean {
+  const currentParts = current.split('.').map(Number);
+  const targetParts = target.split('.').map(Number);
+
+  for (let i = 0; i < Math.max(currentParts.length, targetParts.length); i++) {
+    const currentPart = currentParts[i] || 0;
+    const targetPart = targetParts[i] || 0;
+    
+    if (currentPart < targetPart) return true;
+    if (currentPart > targetPart) return false;
+  }
+  
+  return false;
+}

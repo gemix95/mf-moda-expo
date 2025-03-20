@@ -6,7 +6,11 @@ export const it = {
     loading: 'Caricamento...',
     add: 'Aggiungi',
     cancel: 'Annulla',
-    close: 'Chiudi'
+    close: 'Chiudi',
+    update: 'Aggiorna',
+  },
+  home: {
+    updateAvailable: 'È disponibile una nuova versione! Tocca per aggiornare',
   },
   auth: {
     login: 'Accedi',
@@ -132,7 +136,7 @@ export const it = {
     emptyDescription: 'Salva i tuoi prodotti preferiti per acquistarli più tardi'
   },
   newArrivals: {
-    title: 'New Arrivals',
+    title: 'Nuovi Arrivi',
     subtitle: 'Ogni giorno più di 150 nuovi prodotti arrivano in boutique',
     discover: 'Scopri'
   },

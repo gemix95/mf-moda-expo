@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, Linking } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
@@ -11,16 +11,24 @@ import { useAuthStore } from '@/services/authStore';
 import { ProductCard } from '@/components/ProductCard';
 import { Product } from '@/types/product';
 import { useWishlistStore } from '@/services/wishlistStore';
+import { useLanguageStore } from '@/services/languageStore';
+import { Config } from '@/types/config';
+import { isVersionLower } from '@/utils/version';
+import Constants from 'expo-constants';
+import { useConfigStore } from '@/services/configStore';
 
 export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [logged, setLogged] = useState(false);
-  const [banner, setBanner] = useState<{ message: string; visible: boolean } | null>(null);
+  // Update the banner state type
+  const [banner, setBanner] = useState<{ message: string; visible: boolean; style?: string } | null>(null);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [wishlistProducts, setWishlistProducts] = useState<Product[]>([]);
   const { preferredSector } = useShoppingPreferencesStore();
   const { productIds } = useWishlistStore();
+  const { translations } = useLanguageStore();
+  const { config } = useConfigStore();
 
   useEffect(() => {
     Promise.all([loadHomepage(), loadNewArrivals(), loadWishlistProducts(), login()]);
@@ -89,8 +97,43 @@ export default function HomeScreen() {
   return (
     <ScrollView style={styles.container}>
       {banner?.visible && (
-        <View style={styles.banner}>
-          <Text style={styles.bannerText}>{banner.message}</Text>
+        <LinearGradient
+          colors={
+            banner.style === 'spatial' 
+              ? ['#c865ef', '#5cdcee']
+              : ['#fdf1d3', '#fcd7c2']
+          }
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.banner}
+        >
+          <Text style={[
+            styles.bannerText,
+            { color: banner.style === 'spatial' ? '#fff' : '#000' }
+          ]}>
+            {banner.message}
+          </Text>
+        </LinearGradient>
+      )}
+
+    {config?.update.showUpdateCardAndroid && 
+       isVersionLower(Constants.expoConfig?.version || '0.0.0', config?.update.lastVersionOnPlayStore) && (
+        <View style={styles.updateCard}>
+          <View style={styles.updateContent}>
+            <Text style={styles.updateText}>
+              {translations.home.updateAvailable}
+            </Text>
+            <TouchableOpacity 
+              style={styles.updateButton}
+              onPress={() => {
+                Linking.openURL('market://details?id=com.mfmoda.app');
+              }}
+            >
+              <Text style={styles.updateButtonText}>
+                {translations.common.update}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
 
@@ -127,7 +170,7 @@ export default function HomeScreen() {
 
       {newArrivals.length > 0 && (
         <View style={styles.newArrivalsSection}>
-          <Text style={styles.sectionTitle}>New Arrivals</Text>
+          <Text style={styles.sectionTitle}>{translations.newArrivals.title}</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel}>
             {newArrivals.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -170,7 +213,7 @@ export default function HomeScreen() {
 
       {wishlistProducts.length > 0 && (
         <View style={styles.newArrivalsSection}>
-          <Text style={styles.sectionTitle}>Your Wishlist</Text>
+          <Text style={styles.sectionTitle}>{translations.profile.menu.wishlist}</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.carousel}>
             {wishlistProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -227,7 +270,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bannerText: {
-    color: '#fff',
     fontSize: 14,
     textAlign: 'center',
   },
@@ -264,5 +306,49 @@ const styles = StyleSheet.create({
   },
   carousel: {
     paddingLeft: 16,
+  },
+  updateBanner: {
+    backgroundColor: '#007AFF',
+    padding: 16,
+    alignItems: 'center',
+  },
+  updateBannerText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  updateCard: {
+    backgroundColor: '#fff',
+    marginHorizontal: 16,
+    marginVertical: 8,
+    borderRadius: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  updateContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+  },
+  updateText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#333',
+    marginRight: 16,
+  },
+  updateButton: {
+    backgroundColor: '#000',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  updateButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
   },
 });

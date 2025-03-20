@@ -6,7 +6,11 @@ export const en = {
     loading: 'Loading...',
     add: 'Add',
     cancel: 'Cancel',
-    close: 'Close'
+    close: 'Close',
+    update: 'Update',
+  },
+  home: {
+    updateAvailable: 'A new version is available! Tap to update',
   },
   auth: {
     login: 'Login',
