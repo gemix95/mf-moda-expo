@@ -46,7 +46,8 @@ export const it = {
     size: 'Taglia',
     quantity: 'Qtà',
     proceedCheckout: 'Procedi al Checkout',
-    coupon: 'Coupon'
+    coupon: 'Coupon',
+    each: 'cad.',
   },
   profile: {
     welcome: 'Benvenuto',

@@ -117,12 +117,31 @@ export default function CartScreen() {
                 <Text style={styles.soldOutBadge}>{translations.cart.soldOut}</Text>
               ) : 
               <View style={styles.priceContainer}>
-                <Text style={styles.price}>
-                  {cartData?.totalCart.currency} {item.price.toFixed(2)}
-                </Text>
-                {item.originalPrice && <Text style={styles.originalPrice}/> }
-                </View>
+              {item.originalPrice ? (
+                  <>
+                    <Text style={styles.price}>
+                      {cartData?.totalCart.currency} {(item.price * item.quantitySelected).toFixed(2)}
+                    </Text>
+                    <Text style={styles.originalPrice}>
+                      {cartData?.totalCart.currency} {(item.originalPrice * item.quantitySelected).toFixed(2)}
+                    </Text>
+                  </>
+                ) : (
+                  <Text style={styles.price}>
+                    {cartData?.totalCart.currency} {(item.price * item.quantitySelected).toFixed(2)}
+                  </Text>
+                )
               }
+              </View>
+              }
+              {item.coupon && 
+                <View style={styles.couponContainer}>
+                  <Text style={styles.couponCode}>{item.coupon.code}</Text>
+                  <Text style={styles.couponPrice}>
+                    -{cartData?.totalCart.currency} {((item.price - item.coupon.price) * item.quantitySelected).toFixed(2)}
+                  </Text>
+                </View>
+              }  
             </View>
             <TouchableOpacity
               style={styles.removeButton}
@@ -304,5 +323,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     fontWeight: '500',
-  },
+  }
 });

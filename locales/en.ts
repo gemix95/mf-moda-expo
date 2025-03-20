@@ -46,7 +46,8 @@ export const en = {
     size: 'Size',
     quantity: 'Qty',
     proceedCheckout: 'Proceed to Checkout',
-    coupon: 'Coupon'
+    coupon: 'Coupon',
+    each: 'each',
   },
   profile: {
     welcome: 'Welcome',
