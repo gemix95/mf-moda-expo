@@ -113,27 +113,16 @@ export default function CartScreen() {
               <Text style={styles.sizeText}>{translations.cart.size}: {item.size}</Text>
               <Text style={styles.sizeText}>{translations.cart.quantity}: {item.quantitySelected}</Text>
               
-              {item.quantityAvailable === 0 && (
+              {item.quantityAvailable === 0 ? (
                 <Text style={styles.soldOutBadge}>{translations.cart.soldOut}</Text>
-              )}
-              
-              {/* Update footer section */}
-              <View style={styles.totalContainer}>
-                <Text style={styles.totalLabel}>{translations.cart.shipping}</Text>
-                <Text style={styles.totalLabel}>{translations.cart.shippingCalc}</Text>
-              </View>
-              <View style={styles.totalContainer}>
-                <Text style={styles.totalLabel}>{translations.cart.subtotal}</Text>
-                <Text style={styles.totalAmount}>
-                  {cartData?.totalCart.currency} {cartData?.totalCart.price.toFixed(2)}
+              ) : 
+              <View style={styles.priceContainer}>
+                <Text style={styles.price}>
+                  {cartData?.totalCart.currency} {item.price.toFixed(2)}
                 </Text>
-              </View>
-              <TouchableOpacity 
-                style={styles.checkoutButton}
-                onPress={handleCheckout}
-              >
-                <Text style={styles.checkoutButtonText}>{translations.cart.proceedCheckout}</Text>
-              </TouchableOpacity>
+                {item.originalPrice && <Text style={styles.originalPrice}/> }
+                </View>
+              }
             </View>
             <TouchableOpacity
               style={styles.removeButton}
