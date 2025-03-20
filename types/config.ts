@@ -13,7 +13,7 @@ export interface Config {
             urlImage: string;
         };
         maintenance: {
-            enabled: boolean;
+            androidEnabled: boolean;
         };
     }
   }

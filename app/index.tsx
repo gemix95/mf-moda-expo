@@ -21,7 +21,7 @@ export default function RootScreen() {
     try {
       const response = await api.getConfig();
       
-      if (response.data.maintenance?.enabled) {
+      if (response.data.maintenance?.androidEnabled) {
         setIsMaintenanceMode(true);
         return;
       }
