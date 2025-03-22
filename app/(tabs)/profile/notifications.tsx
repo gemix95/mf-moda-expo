@@ -43,7 +43,6 @@ export default function NotificationsScreen() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
