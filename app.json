@@ -10,14 +10,16 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mfmoda"
+      "bundleIdentifier": "com.mfmoda",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "it.mfmoda.android"
+      "package": "it.mfmoda.android",
+      "versionCode": 2
     },
     "web": {
       "bundler": "metro",

@@ -126,7 +126,7 @@ export default function HomeScreen() {
             <TouchableOpacity 
               style={styles.updateButton}
               onPress={() => {
-                Linking.openURL('market://details?id=com.mfmoda.app');
+                Linking.openURL('market://details?id=com.mfmoda.android');
               }}
             >
               <Text style={styles.updateButtonText}>

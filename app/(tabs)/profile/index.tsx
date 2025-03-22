@@ -62,13 +62,13 @@ export default function ProfileScreen() {
       case 'review':
         const storeUrl = Platform.select({
           ios: 'https://apps.apple.com/app/idYOUR_APP_ID',
-          android: 'market://details?id=com.mfmoda.app',
+          android: 'market://details?id=com.mfmoda.android',
           default: 'https://mfmoda.com'
         });
         Linking.openURL(storeUrl).catch(() => {
           const webUrl = Platform.select({
             ios: 'https://apps.apple.com/app/idYOUR_APP_ID',
-            android: 'https://play.google.com/store/apps/details?id=com.mfmoda.app',
+            android: 'https://play.google.com/store/apps/details?id=com.mfmoda.android',
             default: 'https://mfmoda.com'
           });
           Linking.openURL(webUrl);

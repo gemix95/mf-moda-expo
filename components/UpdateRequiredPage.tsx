@@ -5,7 +5,7 @@ export function UpdateRequiredPage() {
   const { translations } = useLanguageStore();
   
   const handleUpdate = () => {
-    Linking.openURL('market://details?id=com.mfmoda.app');
+    Linking.openURL('market://details?id=com.mfmoda.android');
   };
 
   return (
