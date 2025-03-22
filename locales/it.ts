@@ -221,4 +221,24 @@ export const it = {
       addToCart: 'Aggiungi al carrello',
       relatedProducts: 'Prodotti Correlati'
     },
-}
+  info: {
+    title: 'Informazioni',
+    pages: {
+      boutiques: 'Boutiques',
+      giftCards: 'Carte Regalo',
+      customerCare: 'Servizio Clienti',
+      shipping: 'Spedizione',
+      returns: 'Resi e Cambi',
+      klarna: 'Klarna',
+      payments: 'Pagamenti',
+      privacy: 'Privacy',
+      cookiePolicy: 'Politica dei Cookie',
+      manageCookies: 'Gestisci Cookie',
+      loyalty: 'Programma Fedeltà MFM',
+      about: 'Chi Siamo',
+      magazine: 'Magazine',
+      faqs: 'Domande Frequenti',
+      terms: 'Termini e Condizioni'
+    }
+  }
+};

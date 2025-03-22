@@ -221,4 +221,24 @@ from 11:00 to 13:00`,
     addToCart: 'Add to cart',
     relatedProducts: 'Related Products'
   },
-}
+  info: {
+    title: 'Information',
+    pages: {
+      boutiques: 'Boutiques',
+      giftCards: 'Gift Cards',
+      customerCare: 'Customer Care',
+      shipping: 'Shipping',
+      returns: 'Returns and Exchanges',
+      klarna: 'Klarna',
+      payments: 'Payments',
+      privacy: 'Privacy',
+      cookiePolicy: 'Cookie Policy',
+      manageCookies: 'Manage Cookies',
+      loyalty: 'MFM Loyalty Program',
+      about: 'Who We Are',
+      magazine: 'Magazine',
+      faqs: 'FAQs',
+      terms: 'Terms and Conditions'
+    }
+  }
+};

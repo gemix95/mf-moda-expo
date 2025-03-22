@@ -43,6 +43,15 @@ export default function ProfileScreen() {
       case 'language':
         router.push('/(tabs)/profile/language');
         break;
+      case 'infos':
+        router.push('/(tabs)/profile/info');
+        break;
+      case 'info-detail':
+        router.push({
+          pathname: '/(tabs)/profile/info/[slug]',
+          params: { slug: item.slug }
+        });
+        break;
     }
   };
 
