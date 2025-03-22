@@ -5,6 +5,7 @@ export const en = {
     ok: 'OK',
     loading: 'Loading...',
     add: 'Add',
+    apply: 'Apply',
     cancel: 'Cancel',
     close: 'Close',
     update: 'Update',

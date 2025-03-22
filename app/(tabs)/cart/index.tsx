@@ -9,6 +9,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '@/services/authStore';
 import { useLanguageStore } from '@/services/languageStore';
+import { TextInput } from 'react-native';
+import { ActivityIndicator } from 'react-native';
+import { useConfigStore } from '@/services/configStore';
 
 export default function CartScreen() {
   const router = useRouter();
@@ -17,6 +20,9 @@ export default function CartScreen() {
   const { items, removeItem } = useCartStore();
   const { customerInfo, token } = useAuthStore.getState();
   const { translations } = useLanguageStore();
+  const [couponCode, setCouponCode] = useState('');
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+  const { config } = useConfigStore();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -73,7 +79,6 @@ export default function CartScreen() {
 
       setCartData(response.data);
 
-      // Update cart items availability check
       if (response.data.items.length !== items.length) {
         const availableVariantIds = response.data.items.map(item => item.variantId);
         items.forEach(item => {
@@ -90,6 +95,34 @@ export default function CartScreen() {
     }
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    
+    try {
+      setIsApplyingCoupon(true);
+      const variants = items.map(item => ({
+        id: item.variantId,
+        quantity: item.quantity
+      }));
+
+      const response = await api.applyCoupon({ 
+        variants,
+        couponCode: couponCode.trim()
+      });
+
+      setCartData(response.data);
+      setCouponCode('');
+    } catch (error: any) {
+      Alert.alert(
+        translations.cart.errorTitle,
+        error.message || 'Failed to apply coupon'
+      );
+    } finally {
+      setIsApplyingCoupon(false);
+    }
+  };
+
+  // In the return statement, add before the footer
   return (
     <View style={styles.container}>
       {loading && <LoadingScreen />}
@@ -158,32 +191,57 @@ export default function CartScreen() {
           </ScrollView>
 
           {cartData?.items && cartData.items.length > 0 && (
-            <View style={styles.footer}>
-              {cartData?.totalCart?.totalSavings && cartData.totalCart.totalSavings > 0 && (
-                <View style={styles.totalContainer}>
-                  <Text style={styles.savingsLabel}>Coupon</Text>
-                  <Text style={styles.savingsAmount}>
-                    -{cartData.totalCart.currency} {cartData.totalCart.totalSavings.toFixed(2)}
-                  </Text>
+            <>
+              {config?.config.showCouponField && (
+                <View style={styles.couponSection}>
+                  <TextInput
+                    style={styles.couponInput}
+                    placeholder={translations.cart.coupon}
+                    value={couponCode}
+                    onChangeText={setCouponCode}
+                    autoCapitalize="none"
+                  />
+                  <TouchableOpacity 
+                    style={[styles.applyCouponButton, isApplyingCoupon && styles.applyCouponButtonDisabled]}
+                    onPress={handleApplyCoupon}
+                    disabled={isApplyingCoupon}
+                  >
+                    {isApplyingCoupon ? (
+                      <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                      <Text style={styles.applyCouponText}>{translations.common.apply}</Text>
+                    )}
+                  </TouchableOpacity>
                 </View>
               )}
-              <View style={styles.totalContainer}>
-                <Text style={styles.totalLabel}>Spedizione</Text>
-                <Text style={styles.totalLabel}>Calcolata al Checkout</Text>
+
+              <View style={styles.footer}>
+                {cartData?.totalCart?.totalSavings && cartData.totalCart.totalSavings > 0 && (
+                  <View style={styles.totalContainer}>
+                    <Text style={styles.savingsLabel}>Coupon</Text>
+                    <Text style={styles.savingsAmount}>
+                      -{cartData.totalCart.currency} {cartData.totalCart.totalSavings.toFixed(2)}
+                    </Text>
+                  </View>
+                )}
+                <View style={styles.totalContainer}>
+                  <Text style={styles.totalLabel}>Spedizione</Text>
+                  <Text style={styles.totalLabel}>Calcolata al Checkout</Text>
+                </View>
+                <View style={styles.totalContainer}>
+                  <Text style={styles.totalLabel}>Subtotal</Text>
+                  <Text style={styles.totalAmount}>
+                    {cartData?.totalCart.currency} {cartData?.totalCart.price.toFixed(2)}
+                  </Text>
+                </View>
+                <TouchableOpacity 
+                  style={styles.checkoutButton}
+                  onPress={handleCheckout}
+                >
+                  <Text style={styles.checkoutButtonText}>Procedi al Checkout</Text>
+                </TouchableOpacity>
               </View>
-              <View style={styles.totalContainer}>
-                <Text style={styles.totalLabel}>Subtotal</Text>
-                <Text style={styles.totalAmount}>
-                  {cartData?.totalCart.currency} {cartData?.totalCart.price.toFixed(2)}
-                </Text>
-              </View>
-              <TouchableOpacity 
-                style={styles.checkoutButton}
-                onPress={handleCheckout}
-              >
-                <Text style={styles.checkoutButtonText}>Procedi al Checkout</Text>
-              </TouchableOpacity>
-            </View>
+            </>
           )}
         </>
       )}
@@ -331,5 +389,34 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     fontWeight: '500',
-  }
+  },
+  couponSection: {
+    flexDirection: 'row',
+    padding: 16,
+    gap: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+  },
+  couponInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+  },
+  applyCouponButton: {
+    backgroundColor: '#000',
+    padding: 12,
+    borderRadius: 8,
+    justifyContent: 'center',
+  },
+  applyCouponText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  applyCouponButtonDisabled: {
+    opacity: 0.7,
+  },
 });

@@ -476,4 +476,27 @@ export const api = {
 
     return response.json();
   },
+  
+  // Add to your existing api methods
+  async applyCoupon(data: { 
+      variants: Array<{ id: string, quantity: number }>, 
+      couponCode: string 
+    }): Promise<CartAvailabilityResponse> {
+      const response = await fetch(`${BASE_URL}/api/v1/cart/coupon`, {
+        method: 'POST',
+        headers: {
+          ...getHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.message);
+      }
+  
+      return result;
+    },
 };

@@ -5,6 +5,7 @@ export const it = {
     ok: 'OK',
     loading: 'Caricamento...',
     add: 'Aggiungi',
+    apply: 'Applica',
     cancel: 'Annulla',
     close: 'Chiudi',
     update: 'Aggiorna',
