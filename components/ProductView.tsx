@@ -10,6 +10,7 @@ import { useCountryStore } from '@/services/countryStore';
 import { useRouter } from 'expo-router';
 import { useProductStore } from '@/types/productStore';
 import { useLanguageStore } from '@/services/languageStore';
+import { Linking } from 'react-native';  // Add this import at the top
 
 interface ProductViewProps {
   product: Product;
@@ -177,13 +178,22 @@ export function ProductView({ product, path }: ProductViewProps) {
               <View style={styles.accordionContent}>
                 <Text style={styles.accordionText}>{translations.product.customerService.hours}</Text>
                 <View style={styles.customerButtons}>
-                  <TouchableOpacity style={styles.contactButton}>
+                  <TouchableOpacity 
+                    style={styles.contactButton}
+                    onPress={() => Linking.openURL('tel:+393939379956')}
+                  >
                     <Text style={styles.contactButtonText}>{translations.product.customerService.phone}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.contactButton}>
+                  <TouchableOpacity 
+                    style={styles.contactButton}
+                    onPress={() => Linking.openURL('whatsapp://send?phone=393939379956')}
+                  >
                     <Text style={styles.contactButtonText}>{translations.product.customerService.whatsapp}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.contactButton}>
+                  <TouchableOpacity 
+                    style={styles.contactButton}
+                    onPress={() => Linking.openURL('mailto:michele.franzese7@icloud.com')}
+                  >
                     <Text style={styles.contactButtonText}>{translations.product.customerService.email}</Text>
                   </TouchableOpacity>
                 </View>

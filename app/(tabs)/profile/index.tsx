@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { useAuthStore } from '@/services/authStore';
 import { useCountryStore } from '@/services/countryStore';
 import { useLanguageStore } from '@/services/languageStore';
+import { Linking } from 'react-native';  // Add this import at the top
 
 export default function ProfileScreen() {
   var customerInfo = useAuthStore((state) => state.customerInfo);
@@ -138,13 +139,22 @@ export default function ProfileScreen() {
         </View>
         
         <View style={styles.contactButtons}>
-          <TouchableOpacity style={styles.contactButton}>
+          <TouchableOpacity 
+            style={styles.contactButton}
+            onPress={() => Linking.openURL('tel:+393939379956')}
+          >
             <Text style={styles.contactButtonText}>{translations.profile.customerService.phone}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.contactButton}>
+          <TouchableOpacity 
+            style={styles.contactButton}
+            onPress={() => Linking.openURL('whatsapp://send?phone=393939379956')}
+          >
             <Text style={styles.contactButtonText}>{translations.profile.customerService.whatsapp}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.contactButton}>
+          <TouchableOpacity 
+            style={styles.contactButton}
+            onPress={() => Linking.openURL('mailto:michele.franzese7@icloud.com')}
+          >
             <Text style={styles.contactButtonText}>{translations.profile.customerService.email}</Text>
           </TouchableOpacity>
         </View>
