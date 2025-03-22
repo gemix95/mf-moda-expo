@@ -10,7 +10,7 @@ import { useCountryStore } from '@/services/countryStore';
 import { useRouter } from 'expo-router';
 import { useProductStore } from '@/types/productStore';
 import { useLanguageStore } from '@/services/languageStore';
-import { Linking } from 'react-native';  // Add this import at the top
+import { Linking } from 'react-native'; 
 
 interface ProductViewProps {
   product: Product;

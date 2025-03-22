@@ -18,14 +18,12 @@ export default function CartScreen() {
   const { customerInfo, token } = useAuthStore.getState();
   const { translations } = useLanguageStore();
 
-  // Add useFocusEffect to call API when screen is focused
   useFocusEffect(
     React.useCallback(() => {
       checkAvailability();
     }, [items])
   );
 
-  // Add this function after checkAvailability
   const handleCheckout = async () => {
     const hasSoldOutItems = cartData?.items.some(item => item.quantityAvailable === 0);
     
@@ -92,93 +90,103 @@ export default function CartScreen() {
     }
   };
 
-  // Update the total display in the footer
   return (
     <View style={styles.container}>
       {loading && <LoadingScreen />}
 
-      {cartData?.banner?.visible && (
-        <View style={[styles.banner, cartData?.banner.style === 'spatial' && styles.bannerSpatial]}>
-          <Text style={styles.bannerText}>{cartData?.banner.message}</Text>
+      {!loading && (!cartData?.items || cartData.items.length === 0) ? (
+        <View style={styles.emptyContainer}>
+          <MaterialIcons name="shopping-cart" size={64} color="#666" />
+          <Text style={styles.emptyText}>Il tuo carrello è vuoto</Text>
         </View>
-      )}
+      ) : (
+        <>
+          {cartData?.banner?.visible && (
+            <View style={[styles.banner, cartData?.banner.style === 'spatial' && styles.bannerSpatial]}>
+              <Text style={styles.bannerText}>{cartData?.banner.message}</Text>
+            </View>
+          )}
 
-      <ScrollView style={styles.itemsContainer}>
-        {cartData?.items.map((item) => (
-          <View key={item.variantId} style={styles.cartItem}>
-            <Image source={{ uri: item.imageUrl }} style={styles.itemImage} />
-            <View style={styles.itemDetails}>
-              <Text style={styles.brandName}>{item.title}</Text>
-              <Text style={styles.itemDescription}>{item.description}</Text>
-              <Text style={styles.sizeText}>{translations.cart.size}: {item.size}</Text>
-              <Text style={styles.sizeText}>{translations.cart.quantity}: {item.quantitySelected}</Text>
-              
-              {item.quantityAvailable === 0 ? (
-                <Text style={styles.soldOutBadge}>{translations.cart.soldOut}</Text>
-              ) : 
-              <View style={styles.priceContainer}>
-              {item.originalPrice ? (
-                  <>
-                    <Text style={styles.price}>
-                      {cartData?.totalCart.currency} {(item.price * item.quantitySelected).toFixed(2)}
-                    </Text>
-                    <Text style={styles.originalPrice}>
-                      {cartData?.totalCart.currency} {(item.originalPrice * item.quantitySelected).toFixed(2)}
-                    </Text>
-                  </>
-                ) : (
-                  <Text style={styles.price}>
-                    {cartData?.totalCart.currency} {(item.price * item.quantitySelected).toFixed(2)}
-                  </Text>
-                )
-              }
+          <ScrollView style={styles.itemsContainer}>
+            {cartData?.items.map((item) => (
+              <View key={item.variantId} style={styles.cartItem}>
+                <Image source={{ uri: item.imageUrl }} style={styles.itemImage} />
+                <View style={styles.itemDetails}>
+                  <Text style={styles.brandName}>{item.title}</Text>
+                  <Text style={styles.itemDescription}>{item.description}</Text>
+                  <Text style={styles.sizeText}>{translations.cart.size}: {item.size}</Text>
+                  <Text style={styles.sizeText}>{translations.cart.quantity}: {item.quantitySelected}</Text>
+                  
+                  {item.quantityAvailable === 0 ? (
+                    <Text style={styles.soldOutBadge}>{translations.cart.soldOut}</Text>
+                  ) : 
+                  <View style={styles.priceContainer}>
+                  {item.originalPrice ? (
+                      <>
+                        <Text style={styles.price}>
+                          {cartData?.totalCart.currency} {(item.price * item.quantitySelected).toFixed(2)}
+                        </Text>
+                        <Text style={styles.originalPrice}>
+                          {cartData?.totalCart.currency} {(item.originalPrice * item.quantitySelected).toFixed(2)}
+                        </Text>
+                      </>
+                    ) : (
+                      <Text style={styles.price}>
+                        {cartData?.totalCart.currency} {(item.price * item.quantitySelected).toFixed(2)}
+                      </Text>
+                    )
+                  }
+                  </View>
+                  }
+                  {item.coupon && 
+                    <View style={styles.couponContainer}>
+                      <Text style={styles.couponCode}>{item.coupon.code}</Text>
+                      <Text style={styles.couponPrice}>
+                        -{cartData?.totalCart.currency} {((item.price - item.coupon.price) * item.quantitySelected).toFixed(2)}
+                      </Text>
+                    </View>
+                  }  
+                </View>
+                <TouchableOpacity
+                  style={styles.removeButton}
+                  onPress={() => removeItem(item.variantId)}
+                >
+                  <MaterialIcons name="close" size={24} color="#999" />
+                </TouchableOpacity>
               </View>
-              }
-              {item.coupon && 
-                <View style={styles.couponContainer}>
-                  <Text style={styles.couponCode}>{item.coupon.code}</Text>
-                  <Text style={styles.couponPrice}>
-                    -{cartData?.totalCart.currency} {((item.price - item.coupon.price) * item.quantitySelected).toFixed(2)}
+            ))}
+          </ScrollView>
+
+          {cartData?.items && cartData.items.length > 0 && (
+            <View style={styles.footer}>
+              {cartData?.totalCart?.totalSavings && cartData.totalCart.totalSavings > 0 && (
+                <View style={styles.totalContainer}>
+                  <Text style={styles.savingsLabel}>Coupon</Text>
+                  <Text style={styles.savingsAmount}>
+                    -{cartData.totalCart.currency} {cartData.totalCart.totalSavings.toFixed(2)}
                   </Text>
                 </View>
-              }  
+              )}
+              <View style={styles.totalContainer}>
+                <Text style={styles.totalLabel}>Spedizione</Text>
+                <Text style={styles.totalLabel}>Calcolata al Checkout</Text>
+              </View>
+              <View style={styles.totalContainer}>
+                <Text style={styles.totalLabel}>Subtotal</Text>
+                <Text style={styles.totalAmount}>
+                  {cartData?.totalCart.currency} {cartData?.totalCart.price.toFixed(2)}
+                </Text>
+              </View>
+              <TouchableOpacity 
+                style={styles.checkoutButton}
+                onPress={handleCheckout}
+              >
+                <Text style={styles.checkoutButtonText}>Procedi al Checkout</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.removeButton}
-              onPress={() => removeItem(item.variantId)}
-            >
-              <MaterialIcons name="close" size={24} color="#999" />
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
-
-      <View style={styles.footer}>
-        {cartData?.totalCart?.totalSavings && cartData.totalCart.totalSavings > 0 && (
-          <View style={styles.totalContainer}>
-            <Text style={styles.savingsLabel}>Coupon</Text>
-            <Text style={styles.savingsAmount}>
-              -{cartData.totalCart.currency} {cartData.totalCart.totalSavings.toFixed(2)}
-            </Text>
-          </View>
-        )}
-        <View style={styles.totalContainer}>
-          <Text style={styles.totalLabel}>Spedizione</Text>
-          <Text style={styles.totalLabel}>Calcolata al Checkout</Text>
-        </View>
-        <View style={styles.totalContainer}>
-          <Text style={styles.totalLabel}>Subtotal</Text>
-          <Text style={styles.totalAmount}>
-            {cartData?.totalCart.currency} {cartData?.totalCart.price.toFixed(2)}
-          </Text>
-        </View>
-        <TouchableOpacity 
-          style={styles.checkoutButton}
-          onPress={handleCheckout}
-        >
-          <Text style={styles.checkoutButtonText}>Procedi al Checkout</Text>
-        </TouchableOpacity>
-      </View>
+          )}
+        </>
+      )}
     </View>
   );
 }
@@ -312,11 +320,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+    gap: 16,
   },
   emptyText: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#666',
-    marginTop: 16,
   },
   soldOutBadge: {
     color: '#ff4444',
