@@ -10,8 +10,8 @@ import { storage } from '@/services/storage';
 import { useLanguageStore } from '@/services/languageStore';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('enyons@mailnesia.com');
-  const [password, setPassword] = useState('enyons@mailnesia.com');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);

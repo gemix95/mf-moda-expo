@@ -19,7 +19,7 @@
         "backgroundColor": "#000000"
       },
       "package": "it.mfmoda.android",
-      "versionCode": 2
+      "versionCode": 100
     },
     "web": {
       "bundler": "metro",

@@ -91,7 +91,7 @@ android {
         applicationId 'it.mfmoda.android'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode 100
         versionName "3.0.0"
     }
     signingConfigs {
