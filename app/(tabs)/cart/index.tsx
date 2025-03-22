@@ -52,7 +52,8 @@ export default function CartScreen() {
       const response = await api.createCheckout({ 
         variants,
         email: customerInfo?.email,
-        customerAccessToken: token
+        customerAccessToken: token,
+        couponCode: couponCode,
       });
       router.push(`/checkout?url=${encodeURIComponent(response.checkoutUrl)}`);
     } catch (error) {
