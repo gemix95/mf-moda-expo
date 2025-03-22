@@ -6,7 +6,8 @@ import { router } from 'expo-router';
 import { useAuthStore } from '@/services/authStore';
 import { useCountryStore } from '@/services/countryStore';
 import { useLanguageStore } from '@/services/languageStore';
-import { Linking } from 'react-native';  // Add this import at the top
+import { Linking } from 'react-native';  
+import { Platform } from 'react-native';
 
 export default function ProfileScreen() {
   var customerInfo = useAuthStore((state) => state.customerInfo);
@@ -53,8 +54,45 @@ export default function ProfileScreen() {
           params: { slug: item.slug }
         });
         break;
-    }
-  };
+      case 'trust-pilot':
+        Linking.openURL('https://trustpilot.com/review/michelefranzesemoda.com').catch((err) => 
+          console.error('Error opening Trustpilot:', err)
+        );
+        break;
+      case 'review':
+        const storeUrl = Platform.select({
+          ios: 'https://apps.apple.com/app/idYOUR_APP_ID',
+          android: 'market://details?id=com.mfmoda.app',
+          default: 'https://mfmoda.com'
+        });
+        Linking.openURL(storeUrl).catch(() => {
+          const webUrl = Platform.select({
+            ios: 'https://apps.apple.com/app/idYOUR_APP_ID',
+            android: 'https://play.google.com/store/apps/details?id=com.mfmoda.app',
+            default: 'https://mfmoda.com'
+          });
+          Linking.openURL(webUrl);
+        });
+        break;
+      case 'instagram':
+        Linking.openURL('https://www.instagram.com/michelefranzesemoda').catch((err) => 
+          console.error('Error opening Instagram:', err)
+        );
+        break;
+
+      case 'facebook':
+        Linking.openURL('https://facebook.com/MicheleFranzeseModa').catch((err) => 
+          console.error('Error opening Facebook:', err)
+        );
+        break;
+
+      case 'best':
+        Linking.openURL('https://www.camerabuyer.it/en/stores/michele-franzese').catch((err) => 
+          console.error('Error opening Best Shops:', err)
+        );
+        break;
+  }
+};
 
   const sections = [
     {
