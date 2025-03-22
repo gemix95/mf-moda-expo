@@ -185,4 +185,40 @@ export const it = {
       requiredDescription: 'È necessaria una nuova versione dell\'app per continuare. Aggiorna all\'ultima versione.',
       updateNow: 'Aggiorna Ora',
     },
+    product: {
+      details: {
+        title: 'Dettagli Prodotto',
+      },
+      shipping: {
+        title: 'Spedizione',
+        content: `Tutti gli ordini spediti sono accuratamente imballati.
+  I tempi di consegna dipendono dalla destinazione dell'ordine.
+  
+  Italia: Previsto entro 2 giorni lavorativi dalla spedizione.
+  
+  Paesi europei: Previsto entro 3 giorni lavorativi dalla spedizione.
+  
+  Resto del mondo: Previsto entro 4/5 giorni lavorativi dalla spedizione.`
+      },
+      payment: {
+        title: 'Pagamenti',
+        content: `Tutte le transazioni effettuate su Michele Franzese Moda sono protette da avanzati sistemi di sicurezza che proteggono i tuoi dati personali e le informazioni di pagamento rendendoli totalmente illeggibili a terzi.
+  
+  Accettiamo i seguenti metodi di pagamento: Visa, Mastercard, Maestro, American Express, UnionPay, Shop Pay, Apple Pay, Google Pay, Paypal, Klarna e Scalapay.`
+      },
+      customerService: {
+        title: 'Servizio Clienti',
+        hours: `lunedì - venerdì
+  dalle ore 11:00 alle ore 13:30
+  dalle ore 16:00 alle ore 18:00
+  
+  sabato
+  dalle ore 11:00 alle ore 13:00`,
+        phone: 'Telefono',
+        whatsapp: 'WhatsApp',
+        email: 'Email'
+      },
+      addToCart: 'Aggiungi al carrello',
+      relatedProducts: 'Prodotti Correlati'
+    },
 }

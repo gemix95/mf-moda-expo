@@ -9,6 +9,7 @@ import { api } from '@/services/api';
 import { useCountryStore } from '@/services/countryStore';
 import { useRouter } from 'expo-router';
 import { useProductStore } from '@/types/productStore';
+import { useLanguageStore } from '@/services/languageStore';
 
 interface ProductViewProps {
   product: Product;
@@ -16,6 +17,8 @@ interface ProductViewProps {
 }
 
 export function ProductView({ product, path }: ProductViewProps) {
+  // Add translation hook near other hooks
+  const { translations } = useLanguageStore();
   const [showSizeSelector, setShowSizeSelector] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { addItem, removeItem, isInWishlist } = useWishlistStore();
@@ -49,6 +52,8 @@ export function ProductView({ product, path }: ProductViewProps) {
       console.error('Error loading related products:', error);
     }
   };
+
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   return (
     <View style={styles.container}>
@@ -105,9 +110,90 @@ export function ProductView({ product, path }: ProductViewProps) {
             )}
           </View>
 
+          <View style={styles.accordionContainer}>
+            <TouchableOpacity 
+              style={styles.accordionHeader} 
+              onPress={() => setExpandedSection(expandedSection === 'details' ? null : 'details')}
+            >
+              <Text style={styles.accordionTitle}>{translations.product.details.title}</Text>
+              <MaterialIcons 
+                name={expandedSection === 'details' ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} 
+                size={24} 
+                color="#000" 
+              />
+            </TouchableOpacity>
+            {expandedSection === 'details' && (
+              <View style={styles.accordionContent}>
+                <Text style={styles.accordionText}>{product.description}</Text>
+              </View>
+            )}
+
+            <TouchableOpacity 
+              style={styles.accordionHeader} 
+              onPress={() => setExpandedSection(expandedSection === 'shipping' ? null : 'shipping')}
+            >
+              <Text style={styles.accordionTitle}>{translations.product.shipping.title}</Text>
+              <MaterialIcons 
+                name={expandedSection === 'shipping' ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} 
+                size={24} 
+                color="#000" 
+              />
+            </TouchableOpacity>
+            {expandedSection === 'shipping' && (
+              <View style={styles.accordionContent}>
+                <Text style={styles.accordionText}>{translations.product.shipping.content}</Text>
+              </View>
+            )}
+
+            <TouchableOpacity 
+              style={styles.accordionHeader} 
+              onPress={() => setExpandedSection(expandedSection === 'payments' ? null : 'payments')}
+            >
+              <Text style={styles.accordionTitle}>{translations.product.payment.title}</Text>
+              <MaterialIcons 
+                name={expandedSection === 'payments' ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} 
+                size={24} 
+                color="#000" 
+              />
+            </TouchableOpacity>
+            {expandedSection === 'payments' && (
+              <View style={styles.accordionContent}>
+                <Text style={styles.accordionText}>{translations.product.payment.content}</Text>
+              </View>
+            )}
+
+            <TouchableOpacity 
+              style={styles.accordionHeader} 
+              onPress={() => setExpandedSection(expandedSection === 'customer' ? null : 'customer')}
+            >
+              <Text style={styles.accordionTitle}>{translations.product.customerService.title}</Text>
+              <MaterialIcons 
+                name={expandedSection === 'customer' ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} 
+                size={24} 
+                color="#000" 
+              />
+            </TouchableOpacity>
+            {expandedSection === 'customer' && (
+              <View style={styles.accordionContent}>
+                <Text style={styles.accordionText}>{translations.product.customerService.hours}</Text>
+                <View style={styles.customerButtons}>
+                  <TouchableOpacity style={styles.contactButton}>
+                    <Text style={styles.contactButtonText}>{translations.product.customerService.phone}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.contactButton}>
+                    <Text style={styles.contactButtonText}>{translations.product.customerService.whatsapp}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.contactButton}>
+                    <Text style={styles.contactButtonText}>{translations.product.customerService.email}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          </View>
+
           {relatedProducts.length > 0 && (
             <View style={styles.relatedSection}>
-              <Text style={styles.relatedTitle}>Related Products</Text>
+              <Text style={styles.relatedTitle}>{translations.product.relatedProducts}</Text>
               <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -146,7 +232,7 @@ export function ProductView({ product, path }: ProductViewProps) {
           style={styles.addButton}
           onPress={() => setShowSizeSelector(true)}
         >
-          <Text style={styles.addButtonText}>Add to cart</Text>
+          <Text style={styles.addButtonText}>{translations.product.addToCart}</Text>
         </TouchableOpacity>
         
         <TouchableOpacity 
@@ -177,106 +263,106 @@ export function ProductView({ product, path }: ProductViewProps) {
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    },
-    scrollView: {
-      flex: 1,
-    },
-    flatList: { 
-        marginTop: 24
-    },
-    image: {
-      width,
-      height: width * 1.2,
-    },
-    pagination: {
-      flexDirection: 'row',
-      paddingTop: 16,
-      width: '100%',
-      justifyContent: 'center',
-      gap: 8,
-    },
-    paginationDot: {
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      backgroundColor: 'rgba(205, 205, 205, 0.5)',
-    },
-    paginationDotActive: {
-      backgroundColor: '#000',
-    },
-    details: {
-      paddingHorizontal: 16,
-      paddingBottom: 16,
-      paddingTop: 16
-    },
-    brand: {
-      fontSize: 32,
-      fontWeight: '600',
-      marginBottom: 8,
-    },
-    title: {
-      fontSize: 20,
-      marginBottom: 8,
-    },
-    description: {
-      fontSize: 16,
-      color: '#666',
-      marginBottom: 16,
-    },
-    salePrice: {
-      fontSize: 14,
-      fontWeight: '500',
-      color: '#468866',
-    },
-    priceContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8,
-      marginBottom: 16
-    },
-    price: {
-      fontSize: 14,
-      fontWeight: '500',
-    },
-    originalPrice: {
-      textDecorationLine: 'line-through',
-      color: '#999',
-    },
-    footer: {
-      padding: 16,
-      backgroundColor: '#fff',
-      borderTopWidth: 1,
-      borderTopColor: '#f0f0f0',
-      flexDirection: 'row',
-      gap: 12,
-      alignItems: 'center',
-    },
-    buttonsContainer: {
-      flexDirection: 'row',
-      gap: 12,
-      alignItems: 'center',
-    },
-    addButton: {
-      flex: 1,
-      backgroundColor: '#000',
-      padding: 16,
-      borderRadius: 8,
-      alignItems: 'center',
-    },
-    addButtonText: {
-      color: '#fff',
-      fontSize: 16,
-      fontWeight: 'light',
-    },
-    wishlistButton: {
-      padding: 14,
-      borderRadius: 8,
-      borderWidth: 0.5,
-      borderColor: '#000',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  flatList: { 
+      marginTop: 24
+  },
+  image: {
+    width,
+    height: width * 1.2,
+  },
+  pagination: {
+    flexDirection: 'row',
+    paddingTop: 16,
+    width: '100%',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  paginationDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(205, 205, 205, 0.5)',
+  },
+  paginationDotActive: {
+    backgroundColor: '#000',
+  },
+  details: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    paddingTop: 16
+  },
+  brand: {
+    fontSize: 32,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: 20,
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 16,
+  },
+  salePrice: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#468866',
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 16
+  },
+  price: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  originalPrice: {
+    textDecorationLine: 'line-through',
+    color: '#999',
+  },
+  footer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'center',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'center',
+  },
+  addButton: {
+    flex: 1,
+    backgroundColor: '#000',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'light',
+  },
+  wishlistButton: {
+    padding: 14,
+    borderRadius: 8,
+    borderWidth: 0.5,
+    borderColor: '#000',
+  },
   relatedSection: {
     marginTop: 24,
     paddingBottom: 16,
@@ -307,5 +393,45 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginTop: 4,
+  },
+  accordionContainer: {
+    marginTop: 24,
+  },
+  accordionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  accordionTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  accordionContent: {
+    padding: 16
+  },
+  accordionText: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#666',
+  },
+  customerButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 16,
+  },
+  contactButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#000',
+    alignItems: 'center',
+  },
+  contactButtonText: {
+    fontSize: 14,
+    color: '#000',
   },
 });

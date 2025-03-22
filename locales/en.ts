@@ -185,4 +185,40 @@ export const en = {
     requiredDescription: 'A new version of the app is required to continue. Please update to the latest version.',
     updateNow: 'Update Now',
   },
+  product: {
+    details: {
+      title: 'Product Details',
+    },
+    shipping: {
+      title: 'Shipping',
+      content: `All shipped orders are carefully packaged.
+Delivery times depend on the order destination.
+
+Italy: Expected within 2 working days from shipment.
+
+European countries: Expected within 3 working days from shipment.
+
+Rest of the world: Expected within 4/5 working days from shipment.`
+    },
+    payment: {
+      title: 'Payments',
+      content: `All transactions made on Michele Franzese Moda are protected by advanced security systems that protect your personal data and payment information, making them completely unreadable to third parties.
+
+We accept the following payment methods: Visa, Mastercard, Maestro, American Express, UnionPay, Shop Pay, Apple Pay, Google Pay, Paypal, Klarna, and Scalapay.`
+    },
+    customerService: {
+      title: 'Customer Service',
+      hours: `Monday - Friday
+from 11:00 to 13:30
+from 16:00 to 18:00
+
+Saturday
+from 11:00 to 13:00`,
+      phone: 'Phone',
+      whatsapp: 'WhatsApp',
+      email: 'Email'
+    },
+    addToCart: 'Add to cart',
+    relatedProducts: 'Related Products'
+  },
 }
