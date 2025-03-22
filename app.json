@@ -19,7 +19,8 @@
         "backgroundColor": "#000000"
       },
       "package": "it.mfmoda.android",
-      "versionCode": 100
+      "versionCode": 100,
+      "minSdkVersion": 21
     },
     "web": {
       "bundler": "metro",
