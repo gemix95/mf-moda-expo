@@ -19,7 +19,7 @@
         "backgroundColor": "#000000"
       },
       "package": "it.mfmoda.android",
-      "versionCode": 100,
+      "versionCode": 101,
       "minSdkVersion": 24
     },
     "web": {
