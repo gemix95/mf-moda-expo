@@ -12,6 +12,7 @@ import { useLanguageStore } from '@/services/languageStore';
 import { TextInput } from 'react-native';
 import { ActivityIndicator } from 'react-native';
 import { useConfigStore } from '@/services/configStore';
+import * as Notifications from 'expo-notifications';
 
 export default function CartScreen() {
   const router = useRouter();
@@ -29,6 +30,42 @@ export default function CartScreen() {
       checkAvailability();
     }, [items])
   );
+
+  const scheduleAbandonedCartNotification = async () => {
+    if (!config?.cart.abandonedCartNotification?.enabled) return;
+
+    const { title, message, delayMinutes } = config.cart.abandonedCartNotification;
+    const notificationTitle = title[useLanguageStore.getState().language] || title.en;
+    const notificationMessage = message[useLanguageStore.getState().language] || message.en;
+
+    // Cancel any existing abandoned cart notifications
+    cancelAbandonedCartNotification()
+
+    // Schedule new notification with correct trigger type
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: notificationTitle,
+        body: notificationMessage,
+        data: { type: 'abandoned_cart' }
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+        seconds: delayMinutes * 60,
+        repeats: false
+      },
+    });
+  };
+
+  const cancelAbandonedCartNotification = async () => {
+    const notifications = await Notifications.getAllScheduledNotificationsAsync();
+    const abandonedCartNotifications = notifications.filter(n => 
+      n.content.data?.type === 'abandoned_cart'
+    );
+    
+    for (const notification of abandonedCartNotifications) {
+      await Notifications.cancelScheduledNotificationAsync(notification.identifier);
+    }
+  }
 
   const handleCheckout = async () => {
     const hasSoldOutItems = cartData?.items.some(item => item.quantityAvailable === 0);
@@ -55,6 +92,10 @@ export default function CartScreen() {
         customerAccessToken: token,
         couponCode: couponCode,
       });
+
+      // Schedule abandoned cart notification before navigation
+      await scheduleAbandonedCartNotification();
+      
       router.push(`/checkout?url=${encodeURIComponent(response.checkoutUrl)}`);
     } catch (error) {
       Alert.alert(translations.cart.errorTitle, translations.cart.checkoutError);

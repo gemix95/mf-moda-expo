@@ -2,7 +2,7 @@
   "expo": {
     "name": "mf-moda",
     "slug": "mf-moda",
-    "version": "3.0.0",
+    "version": "3.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -19,7 +19,7 @@
         "backgroundColor": "#000000"
       },
       "package": "it.mfmoda.android",
-      "versionCode": 101,
+      "versionCode": 102,
       "minSdkVersion": 24
     },
     "web": {
@@ -42,6 +42,13 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#ffffff"
         }
       ]
     ],

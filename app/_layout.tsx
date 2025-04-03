@@ -6,6 +6,7 @@ import { Stack } from 'expo-router';
 import React from 'react';
 import { useCountryStore } from '@/services/countryStore';
 import { useLanguageStore } from '@/services/languageStore';
+import * as Notifications from 'expo-notifications';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,3 +37,12 @@ export default function RootLayout() {
     </>
   );
 }
+
+// In your initialization code
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});

@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { StyleSheet, View, TouchableOpacity, SafeAreaView, Text } from 'react-native';
 import { useLanguageStore } from '@/services/languageStore';
+import * as Notifications from 'expo-notifications';
 
 export default function CheckoutPage() {
   const { url } = useLocalSearchParams();
@@ -17,8 +18,24 @@ export default function CheckoutPage() {
   }
 
   const handleNavigationStateChange = (navState: { url: string }) => {
-    setShowCloseButton(navState.url.includes('thank_you'));
+    let completedPurchase = navState.url.includes('thank_you')
+    setShowCloseButton(completedPurchase);
+
+    if (completedPurchase) {
+      cancelAbandonedCartNotification()
+    }
   };
+
+  const cancelAbandonedCartNotification = async () => {
+    const notifications = await Notifications.getAllScheduledNotificationsAsync();
+    const abandonedCartNotifications = notifications.filter(n => 
+      n.content.data?.type === 'abandoned_cart'
+    );
+    
+    for (const notification of abandonedCartNotifications) {
+      await Notifications.cancelScheduledNotificationAsync(notification.identifier);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
