@@ -2,7 +2,7 @@
   "expo": {
     "name": "mf-moda",
     "slug": "mf-moda",
-    "version": "3.0.2",
+    "version": "3.1.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mfmoda",
-      "buildNumber": "2"
+      "buildNumber": "0"
     },
     "android": {
       "adaptiveIcon": {
@@ -19,8 +19,10 @@
         "backgroundColor": "#000000"
       },
       "package": "it.mfmoda.android",
-      "versionCode": 102,
-      "minSdkVersion": 24
+      "versionCode": 105,
+      "minSdkVersion": 24,
+      "compileSdkVersion": 35,
+      "targetSdkVersion": 35
     },
     "web": {
       "bundler": "metro",

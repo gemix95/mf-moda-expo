@@ -8,10 +8,12 @@ import { useCountryStore } from '@/services/countryStore';
 import { useLanguageStore } from '@/services/languageStore';
 import { Linking } from 'react-native';  
 import { Platform } from 'react-native';
+import { useConfigStore } from '@/services/configStore';
 
 export default function ProfileScreen() {
   var customerInfo = useAuthStore((state) => state.customerInfo);
   const { selectedCountry } = useCountryStore();
+   const { config } = useConfigStore();
   
   // Format the country display text
   const countryDisplayText = selectedCountry 
@@ -179,13 +181,13 @@ export default function ProfileScreen() {
         <View style={styles.contactButtons}>
           <TouchableOpacity 
             style={styles.contactButton}
-            onPress={() => Linking.openURL('tel:+393939379956')}
+            onPress={() => Linking.openURL(`tel:+39${config?.config.whatsappTechSupport}`)}
           >
             <Text style={styles.contactButtonText}>{translations.profile.customerService.phone}</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.contactButton}
-            onPress={() => Linking.openURL('whatsapp://send?phone=393939379956')}
+            onPress={() => Linking.openURL(`whatsapp://send?phone=39${config?.config.whatsappTechSupport}`)}
           >
             <Text style={styles.contactButtonText}>{translations.profile.customerService.whatsapp}</Text>
           </TouchableOpacity>

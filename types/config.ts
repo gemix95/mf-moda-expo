@@ -16,6 +16,7 @@ export interface Config {
         },
         config: {
             showCouponField: boolean;
+            whatsappTechSupport: string
         };
         update: {
             showUpdateCardAndroid?: boolean;

@@ -154,17 +154,17 @@ export default function HomeScreen() {
           }}
           style={styles.collectionContainer}
         >
+          <View style={styles.collectionTextAbove}>
+            <Text style={styles.collectionName}>{firstCollection.name}</Text>
+            {firstCollection.description ? (
+              <Text style={styles.collectionDescription}>{firstCollection.description}</Text>
+            ) : null}
+          </View>
           <Image
             source={{ uri: firstCollection.image || undefined }}
             style={styles.collectionImage}
             resizeMode="cover"
           />
-          <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.8)']}
-            style={styles.gradient}
-          >
-            <Text style={styles.collectionName}>{firstCollection.name}</Text>
-          </LinearGradient>
         </TouchableOpacity>
       )}
 
@@ -197,17 +197,17 @@ export default function HomeScreen() {
           }}
           style={styles.collectionContainer}
         >
+          <View style={styles.collectionTextAbove}>
+            <Text style={styles.collectionName}>{remainingCollections[0].name}</Text>
+            {remainingCollections[0].description ? (
+              <Text style={styles.collectionDescription}>{remainingCollections[0].description}</Text>
+            ) : null}
+          </View>
           <Image
             source={{ uri: remainingCollections[0].image || undefined }}
             style={styles.collectionImage}
             resizeMode="cover"
           />
-          <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.8)']}
-            style={styles.gradient}
-          >
-            <Text style={styles.collectionName}>{remainingCollections[0].name}</Text>
-          </LinearGradient>
         </TouchableOpacity>
       )}
 
@@ -240,17 +240,17 @@ export default function HomeScreen() {
           }}
           style={styles.collectionContainer}
         >
+          <View style={styles.collectionTextAbove}>
+            <Text style={styles.collectionName}>{collection.name}</Text>
+            {collection.description ? (
+              <Text style={styles.collectionDescription}>{collection.description}</Text>
+            ) : null}
+          </View>
           <Image
             source={{ uri: collection.image || undefined }}
             style={styles.collectionImage}
             resizeMode="cover"
           />
-          <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.8)']}
-            style={styles.gradient}
-          >
-            <Text style={styles.collectionName}>{collection.name}</Text>
-          </LinearGradient>
         </TouchableOpacity>
       ))}
     </ScrollView>
@@ -290,10 +290,30 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
     paddingHorizontal: 16,
   },
+  collectionTextOverlay: {
+    position: 'absolute',
+    top: 24,
+    left: 16,
+    right: 16,
+    zIndex: 2,
+    backgroundColor: 'rgba(255,255,255,0.0)', // transparent, but you can add a slight background if needed
+  },
+  collectionTextAbove: {
+    paddingHorizontal: 16,
+    paddingTop: 24,
+    paddingBottom: 8,
+    backgroundColor: '#fff',
+  },
   collectionName: {
-    color: '#fff',
+    color: '#111',
     fontSize: 24,
     fontWeight: '600',
+  },
+  collectionDescription: {
+    color: '#888',
+    fontSize: 14,
+    fontWeight: '300',
+    marginTop: 4,
   },
   newArrivalsSection: {
     paddingVertical: 20,

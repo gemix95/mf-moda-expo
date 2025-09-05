@@ -21,6 +21,7 @@ export interface Collection {
     isNewArrivals: boolean;
   };
   name: string;
+  description: string | null;
   type: string;
   image: string | null;
   index: number;

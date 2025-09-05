@@ -11,6 +11,7 @@ import { useRouter } from 'expo-router';
 import { useProductStore } from '@/types/productStore';
 import { useLanguageStore } from '@/services/languageStore';
 import { Linking } from 'react-native'; 
+import { useConfigStore } from '@/services/configStore';
 
 interface ProductViewProps {
   product: Product;
@@ -20,6 +21,7 @@ interface ProductViewProps {
 export function ProductView({ product, path }: ProductViewProps) {
   // Add translation hook near other hooks
   const { translations } = useLanguageStore();
+  const { config } = useConfigStore();
   const [showSizeSelector, setShowSizeSelector] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { addItem, removeItem, isInWishlist } = useWishlistStore();
@@ -180,13 +182,13 @@ export function ProductView({ product, path }: ProductViewProps) {
                 <View style={styles.customerButtons}>
                   <TouchableOpacity 
                     style={styles.contactButton}
-                    onPress={() => Linking.openURL('tel:+393939379956')}
+                    onPress={() => Linking.openURL(`tel:+39${config?.config.whatsappTechSupport}`)}
                   >
                     <Text style={styles.contactButtonText}>{translations.product.customerService.phone}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity 
                     style={styles.contactButton}
-                    onPress={() => Linking.openURL('whatsapp://send?phone=393939379956')}
+                    onPress={() => Linking.openURL(`whatsapp://send?phone=39${config?.config.whatsappTechSupport}`)}
                   >
                     <Text style={styles.contactButtonText}>{translations.product.customerService.whatsapp}</Text>
                   </TouchableOpacity>
