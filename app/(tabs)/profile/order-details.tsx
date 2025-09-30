@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Linking } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { format } from 'date-fns';
 import { it, enUS } from 'date-fns/locale';
@@ -56,6 +56,23 @@ export default function OrderDetailsScreen() {
             </Text>
             <Text style={styles.addressText}>
               {order.billingAddress.zip}, {order.billingAddress.city}, {order.billingAddress.country}
+            </Text>
+          </>
+        )}
+
+        {order.tracking && order.tracking.url && (
+          <>  
+            <View style={styles.addressHeader}>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{translations.orders.tracking}</Text>
+              </View>
+            </View>
+            <Text style={styles.trackingCompany}>{order.tracking.companyName}</Text>          
+            <Text 
+              style={styles.trackingLink} 
+              onPress={() => Linking.openURL(order.tracking.url)}
+            >
+              {translations.orders.trackOrder}
             </Text>
           </>
         )}
@@ -219,6 +236,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     lineHeight: 20,
+  },
+  trackingCompany: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  trackingLink: {
+    fontSize: 14,
+    color: '#007AFF',
+    textDecorationLine: 'underline',
   },
   productItem: {
     flexDirection: 'row',

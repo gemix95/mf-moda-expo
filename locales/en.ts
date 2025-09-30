@@ -126,7 +126,10 @@ export const en = {
     noOrders: 'No orders placed',
     noOrdersDescription: 'Your orders will appear here once you make a purchase',
     orderNumber: 'Order',
-    returned: 'Returned'
+    returned: 'Returned',
+    tracking: 'Order Tracking',
+    trackingCompany: 'Shipping Company',
+    trackOrder: 'Track Order',
   },
   country: {
     priceAvailabilityNote: 'Price and availability may vary based on your country/region',

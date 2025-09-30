@@ -126,7 +126,10 @@ export const it = {
     noOrders: 'Nessun ordine effettuato',
     noOrdersDescription: 'I tuoi ordini appariranno qui una volta effettuato l\'acquisto',
     orderNumber: 'Ordine',
-    returned: 'Reso'
+    returned: 'Reso',
+    tracking: 'Tracciamento Ordine',
+    trackingCompany: 'Corriere',
+    trackOrder: 'Traccia Ordine',
   },
   country: {
     priceAvailabilityNote: 'Prezzo e disponibilità possono variare in base al tuo paese/regione',

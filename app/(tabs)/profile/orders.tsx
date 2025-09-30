@@ -91,6 +91,12 @@ export default function OrdersScreen() {
                       currency: order.totalPrice.currencyCode
                     }).format(Number(order.totalPrice.amount))}
                   </Text>
+                  {order.tracking && (
+                    <View style={styles.trackingBadge}>
+                      <Text style={styles.trackingText}>{translations.orders.trackingCompany}: {order.tracking.companyName}</Text>
+                    </View>
+                  )}
+
                   {order.canceledAt && (
                     <View style={styles.cancelledBadge}>
                       <Text style={styles.cancelledText}>{translations.orders.returned}</Text>
@@ -140,7 +146,7 @@ const styles = StyleSheet.create({
   },
   section: {
     paddingVertical: 24,
-    },
+  },
   orderCard: {
     marginHorizontal: 16,
     marginVertical: 8,
@@ -183,6 +189,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '300',
   },
+  trackingBadge: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    alignSelf: 'flex-start',
+    marginTop: 4,
+  },
+  trackingText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  cancelledBadge: {
+    backgroundColor: '#ff3b30',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    alignSelf: 'flex-start',
+    marginTop: 4,
+  },
   cancelledText: {
     color: '#fff',
     fontSize: 12,
@@ -199,44 +226,36 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
   },
-    imageWrapper: {
-      position: 'relative',
-      width: 80,
-      height: 120,
-    },
-    itemCountBadge: {
-      position: 'absolute',
-      top: 'auto',
-      right: -8,
-      backgroundColor: '#000',
-      borderRadius: 12,
-      paddingHorizontal: 6,
-      paddingVertical: 2,
-    },
-    itemCountText: {
-      color: '#fff',
-      fontSize: 12,
-      fontWeight: '500',
-    },
-        itemContainer: {
-          flexDirection: 'row',
-        },
-        orderDetails: {
-          flex: 1,
-          marginLeft: 32,
-          justifyContent: 'center',
-          gap: 4,
-        },
-        cancelledBadge: {
-          backgroundColor: '#ff3b30',
-          paddingHorizontal: 8,
-          paddingVertical: 4,
-          borderRadius: 4,
-          alignSelf: 'flex-start',
-          marginTop: 4,
-        },
-        arrowContainer: {
-            justifyContent: 'center',
-            paddingLeft: 16,
-          }
+  imageWrapper: {
+    position: 'relative',
+    width: 80,
+    height: 120,
+  },
+  itemCountBadge: {
+    position: 'absolute',
+    top: 'auto',
+    right: -8,
+    backgroundColor: '#000',
+    borderRadius: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  itemCountText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  itemContainer: {
+    flexDirection: 'row',
+  },
+  orderDetails: {
+    flex: 1,
+    marginLeft: 32,
+    justifyContent: 'center',
+    gap: 4,
+  },
+  arrowContainer: {
+    justifyContent: 'center',
+    paddingLeft: 16,
+  }
 });

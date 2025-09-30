@@ -45,6 +45,10 @@ export interface LoginResponse {
     };
     fulfillmentStatus: string;
     canceledAt?: string;
+    tracking?: {
+      companyName: string;
+      url: string;
+    }
   }
 
   export interface OrderItem {
